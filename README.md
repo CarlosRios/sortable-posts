@@ -21,3 +21,4 @@ After you've installed Sortable Posts into your project all you need to do is te
 ### 0.2.1
  - fix manage column error
  - fix error with columns unsetting
+ - fix post array issue when adding new post

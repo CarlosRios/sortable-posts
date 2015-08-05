@@ -195,7 +195,7 @@ function sortablePostsUpdateOrder()
 /**
  * Add order number to newly created post.
  */
-add_filter( 'wp_insert_post_data','sortablePostsInsertNewPost' );
+add_filter( 'wp_insert_post_data','sortablePostsInsertNewPost', '99', 2 );
 function sortablePostsInsertNewPost( $data, $postarr )
 {
 	$postTypes = apply_filters( 'sortable_post_types', array(), $types );
