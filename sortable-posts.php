@@ -1,9 +1,8 @@
 <?php
 
 /**
- * @package Sortable Posts
- * Description: Sortable posts is a WordPress extension that helps users sort their posts easily.
- * @author Carlos Rios <carlos@texaswebsitemanagement.com>
+ * @package Sortable Posts For WordPress
+ * @author Carlos Rios
  * @version  0.2.1
  */
 
