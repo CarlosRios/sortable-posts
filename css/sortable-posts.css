@@ -1,0 +1,29 @@
+.wp-list-table #sortable-posts-order{
+	width: 30px;
+	border-right: 1px solid #E1E1E1;
+	text-align: center;
+}
+.wp-list-table #the-list .sortable-posts-order{
+	border-left: 4px solid transparent;
+	transition: all 0.1s linear;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	padding-left: 8px;
+	padding-right: 12px;
+	text-align: center;
+	border-right: 1px solid #E1E1E1;
+}
+body.sortable-posts .wp-list-table #the-list tr{
+	cursor: move;
+}
+body.sortable-posts .wp-list-table #the-list tr:hover .sortable-posts-order{
+	border-left-color: #2d2d2d;
+}
+body.sortable-posts .wp-list-table #the-list tr.ui-sortable-helper{
+	background: #ffffff;
+	box-shadow: 0 3px 4px rgba(0,0,0, 0.2);
+}
+body.sortable-posts .wp-list-table .column-sortable-posts-order{
+	text-align: center;
+	border-right: 1px solid #E1E1E1;
+}
