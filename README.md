@@ -1,7 +1,7 @@
 ## Sortable Posts For WordPress
 Sortable Posts is a small framework for WordPress that adds sortability to the post edit screen of any post type you choose.
 
-[display]: https://github.com/CarlosRios/sortable-posts-wp/raw/master/assets/images/display_image.jpg "Sortable Posts For WordPress"
+![Sortable Posts Display](https://github.com/CarlosRios/sortable-posts-wp/blob/plugin/assets/images/display_image.jpg)
 
 **Version:** 0.1.0
 **Requires at least:** 4.0
