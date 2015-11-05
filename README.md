@@ -1,24 +1,40 @@
 ## Sortable Posts For WordPress
-Sortable Posts is a small framework for WordPress that adds sortability to the post edit screen of any post type you choose. You can view the docs for it [here](http://sortable.texaswebsitemanagement.com).
+Sortable Posts is a small framework for WordPress that adds sortability to the post edit screen of any post type you choose.
 
-**Version:** 0.2.1
-**Requires at least:** 4.0
-**Tested up to:** 4.2.4
+![Sortable Posts Display](https://github.com/CarlosRios/sortable-posts-wp/blob/plugin/assets/images/display_image.jpg)
+
+**Version:**			0.1.0
+**Requires at least:**	4.0
+**Tested up to:**		4.3.1
+**License:**			GPLv2 or later
 
 ## Installation
-To install Sortable Posts, unzip the "sortable-posts" folder anywhere in your theme or plugin. After its in your project's directory, you can include sortable-posts.php
+To install Sortable Posts, unzip the "sortable-posts" folder to your plugins directory, and activate.
 
-## Using Sortable Posts With Your Post Types
-After you've installed Sortable Posts into your project all you need to do is tell it which post types you'd like to make sortable. Add the sortable_post_types filter to your project and return an array with the the post types you'd like to make sortable.
+## What Sortable Posts Does
+Sortable Posts updates a list of posts via the menu_order built into WordPress.
 
-		add_filter('sortable_post_types', 'initSortablePosts');
-		function initSortablePosts( $types ){
-			return array( 'team', 'page' );
-		}
+## Using Sortable Posts In Your Theme / Plugin
+Sortable Posts currently allows users to add post types to the list of sortable post types by either adding them in the options panel or by adding them via a custom filter. Should you want to add them via a filter you can use the `sortable_post_types` filter and return an array with the the post types you'd like to make sortable.
+
+``` php
+	add_filter( 'sortable_post_types', 'add_sortable_post_types' );
+	function add_sortable_post_types( $types ) {
+		return array( 'team', 'events' );
+	}
+```
+
+## Overriding the default sort functionality
+Sortable Posts changes the default 'order_by' parameter of all queries using a post type that has been made sortable just to make things easier. However, should you wish to override that functionality simply override it in your WP_Query.
+
+```php
+	$query = new WP_Query( array(
+		'post_type'		=> $sortable_post_type,
+		'order_by'		=> 'title'
+	));
+```
 
 ## Recent Changes
 
-### 0.2.1
- - fix manage column error
- - fix error with columns unsetting
- - fix post array issue when adding new post
+### 0.1.0
+ - initial commit

@@ -13,7 +13,7 @@
 	text-align: center;
 	border-right: 1px solid #E1E1E1;
 }
-body.sortable-posts .wp-list-table #the-list tr{
+body.sortable-posts .wp-list-table #the-list tr .column-sortable-posts-order{
 	cursor: move;
 }
 body.sortable-posts .wp-list-table #the-list tr:hover .sortable-posts-order{
@@ -26,4 +26,7 @@ body.sortable-posts .wp-list-table #the-list tr.ui-sortable-helper{
 body.sortable-posts .wp-list-table .column-sortable-posts-order{
 	text-align: center;
 	border-right: 1px solid #E1E1E1;
+}
+body.sortable-posts .wp-list-table #the-list .sortable-posts-placeholder{
+	z-index: 999;
 }
