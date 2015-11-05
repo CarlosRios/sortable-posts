@@ -3,9 +3,10 @@ Sortable Posts is a small framework for WordPress that adds sortability to the p
 
 ![Sortable Posts Display](https://github.com/CarlosRios/sortable-posts-wp/blob/plugin/assets/images/display_image.jpg)
 
-**Version:** 0.1.0
-**Requires at least:** 4.0
-**Tested up to:** 4.3.1
+**Version:**			0.1.0
+**Requires at least:**	4.0
+**Tested up to:**		4.3.1
+**License:**			GPLv2 or later
 
 ## Installation
 To install Sortable Posts, unzip the "sortable-posts" folder to your plugins directory, and activate.
