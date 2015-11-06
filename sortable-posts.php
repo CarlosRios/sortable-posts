@@ -117,9 +117,13 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		{
 			global $post, $wp_query;
 
-			// Get the starting point for the menu_order.
-			$start = ($wp_query->query_vars['paged'] == 1 || $wp_query->query_vars['paged'] == 0 ) ? 1 : ($wp_query->query_vars['posts_per_page'] * $wp_query->query_vars['paged']) - $wp_query->query_vars['posts_per_page'] + 1;
-
+			// Set the starting point for the menu_order.
+			if( isset( $wp_query->query_vars['paged'] ) ) {
+				$start = ($wp_query->query_vars['paged'] == 1 || $wp_query->query_vars['paged'] == 0 ) ? 1 : ($wp_query->query_vars['posts_per_page'] * $wp_query->query_vars['paged']) - $wp_query->query_vars['posts_per_page'] + 1;
+			}else{
+				$start = 1;
+			}
+			
 			// Javascript
 			wp_enqueue_script( 'jquery-ui-sortable' );
 			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), 'jquery' );
@@ -230,16 +234,18 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function order_by_sortable_posts( $query )
 		{
-			if( in_array( $query->query_vars['post_type'], $this->sortable_types ) )
-			{
-				// User submitted orderby takes priority to allow for override
-				if( !isset( $query->query_vars['orderby'] ) ) {
-					$query->set( 'orderby', 'menu_order' );
-				}
-				
-				// User submitted order takes priority to allow for override
-				if( !isset( $query->query_vars['order'] ) ) {
-					$query->set( 'order', 'ASC');
+			if( isset( $query->query_vars['post_type'] ) ) {
+				if( in_array( $query->query_vars['post_type'], $this->sortable_types ) )
+				{
+					// User submitted orderby takes priority to allow for override
+					if( !isset( $query->query_vars['orderby'] ) ) {
+						$query->set( 'orderby', 'menu_order' );
+					}
+					
+					// User submitted order takes priority to allow for override
+					if( !isset( $query->query_vars['order'] ) ) {
+						$query->set( 'order', 'ASC');
+					}
 				}
 			}
 		}
