@@ -1,4 +1,4 @@
-=== Sortable Posts For WordPress ===
+=== Sortable Posts ===
 Contributors: carlosrios
 Author URI: http://www.texaswebsitemanagement.com
 Plugin URI: https://github.com/CarlosRios/sortable-posts-wp

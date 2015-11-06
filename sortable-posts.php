@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Sortable Posts For WordPress
+ * Plugin Name: Sortable Posts
  * Description: Sortable Posts is a small plugin for WordPress that adds sortability to the post edit screen of any post type you choose.
  * Author: Carlos Rios
  * Author URI: http://www.texaswebsitemanagement.com
