@@ -56,6 +56,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		public function includes()
 		{
 			require_once( 'includes/class-sp-settings.php' );
+			require_once( 'includes/class-sp-api.php' );
 		}
 
 		/**
