@@ -238,19 +238,26 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function order_by_sortable_posts( $query )
 		{
-			if( isset( $query->query_vars['post_type'] ) ) {
-				if( in_array( $query->query_vars['post_type'], $this->sortable_types ) )
-				{
-					// User submitted orderby takes priority to allow for override
-					if( !isset( $query->query_vars['orderby'] ) ) {
+			// Check if post type is set and if its sortable
+			if( isset( $query->query_vars['post_type'] ) &&
+				in_array( $query->query_vars['post_type'], $this->sortable_types ) ) {
+				
+				// Override on admin
+				if( is_admin() ) {
+					$query->set( 'orderby', 'menu_order' );
+					$query->set( 'order', 'ASC' );
+				} else {
+					// User submitted orderby takes priority to allow for override in frontend
+					if( ! isset( $query->query_vars['orderby'] ) ) {
 						$query->set( 'orderby', 'menu_order' );
 					}
 					
-					// User submitted order takes priority to allow for override
-					if( !isset( $query->query_vars['order'] ) ) {
+					// User submitted order takes priority to allow for override in frontend
+					if( ! isset( $query->query_vars['order'] ) ) {
 						$query->set( 'order', 'ASC');
 					}
 				}
+				
 			}
 		}
 
