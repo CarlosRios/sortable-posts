@@ -80,7 +80,7 @@ class SortablePostsSettings {
 			'_builtin' => false,
 		);
 		$available_types = get_post_types( $args, 'objects' );
-		$option = get_option( 'sortable_posts' ); ?>
+		$option = get_option( 'sortable_posts', array() ); ?>
 
 		<fieldset id="sortable-posts-fieldset">
 			<?php
