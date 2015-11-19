@@ -14,6 +14,7 @@
 	border-right: 1px solid #E1E1E1;
 }
 body.sortable-posts .wp-list-table #the-list tr .column-sortable-posts-order{
+	background: #FFF;
 	cursor: move;
 }
 body.sortable-posts .wp-list-table #the-list tr:hover .sortable-posts-order{
