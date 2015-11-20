@@ -32,7 +32,7 @@ class SortablePostsAPI extends WP_REST_Controller {
 		register_rest_route( $namespace, '/update', array(
 			'methods'				=> WP_REST_Server::EDITABLE,
 			'callback'				=> array( $this, 'update_item' ),
-			'permission_callback'	=> array( $this, 'update_item_permissions_check' ),
+			//'permission_callback'	=> array( $this, 'update_item_permissions_check' ),
 			'args'					=> $this->get_endpoint_args_for_item_schema( false )
 		));
 	}
@@ -49,13 +49,25 @@ class SortablePostsAPI extends WP_REST_Controller {
 
 		// Update the sort order
 		$data = $this->update_sort_order();
-		
+
+		// Send error if update fails		
 		if ( $data == false ) {
-			return new WP_Error( 'nothing-happened', __( 'Nothing happened. Try again?', 'sortable-posts' ), array( 'status' => 500 ) );
+			$response = array(
+				'status'		=> 400,
+				'after_message'	=> '',
+			);
+			return new WP_Error( 'nothing-happened', __( 'Nothing happened. Try again.', 'sortable-posts' ), $response );
 		}
 
-		// Create the response message
-		$response = __( 'Saved successfully.', 'sortable-posts' );
+		// Create the success response message
+		$response = array(
+			'code'		=> 'sortable-posts-updated',
+			'message'	=> __( 'Saved successfully.', 'sortable-posts' ),
+			'data'		=> array(
+				'status' 		=> 200,
+				'after_message'	=> '',
+			),
+		);
 
 		// Return the response
 		return new WP_REST_Response( $response, 200 );

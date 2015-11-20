@@ -50,15 +50,22 @@ jQuery(document).ready(function($)
 				numberContainer.html( (WP_API_Settings.start * 1) + index );
 			});
 
+			// Parse the json and reflect the message to the user
+			statusMsg.html( response.message );
+
+			// Add classes to the status
 			statusBox.addClass( 'updated sp-visible animated fadeInUp' );
 
 		}).fail( function( response ) {
 
-			statusBox.addClass( 'error sp-visible animated fadeInUp' );
-			
-		}).always( function( response ) {
+			// Parse the json for the error
+			var data = $.parseJSON( response.responseText );
+			statusMsg.html( data.message );
 
-			statusMsg.html( response );
+			// Add classes to the status
+			statusBox.addClass( 'error sp-visible animated fadeInUp' );
+
+		}).always( function( response ) {
 
 			// Remove classes and fade out
 			setTimeout(function() {
@@ -71,7 +78,7 @@ jQuery(document).ready(function($)
 			}, 4800 );
 		
 		});
-		
+
 	});
 
 });
