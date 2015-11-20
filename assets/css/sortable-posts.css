@@ -32,6 +32,8 @@ body.sortable-posts .wp-list-table #the-list .sortable-posts-placeholder{
 	z-index: 999;
 }
 #sortable-posts-status{
+	display: none;
+	opacity: 0;
 	padding: 5px 20px 10px;
 	margin: 0 !important;
 	position: absolute;
@@ -52,4 +54,42 @@ body.sortable-posts .wp-list-table #the-list .sortable-posts-placeholder{
 #sortable-posts-message{
 	display: block;
 	padding: 5px 0 5px;
+}
+.sp-visible{
+	display: block !important;
+}
+
+/**
+ * Animations
+ */
+.animated {
+  animation-duration: 0.8s;
+  animation-fill-mode: both;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fadeInUp {
+  animation-name: fadeInUp;
+}
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+.fadeOutDown {
+  animation-name: fadeOutDown;
 }

@@ -129,17 +129,17 @@ if( ! class_exists( 'SortablePosts' ) ) {
 				$start = 1;
 			}
 			
+			// Create settings for localization
+			$settings = array(
+				'root' => esc_url_raw( rest_url() ),
+				'nonce' => wp_create_nonce( 'wp_rest' ),
+				'start'	=> $start
+			);
+
 			// Load scripts
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'underscore' );
-			wp_enqueue_script( 'backbone' );
-			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), array( 'jquery', 'underscore', 'backbone' ) );
-
-			// Localize the script
-			wp_localize_script( 'sortable-posts-js', 'sortablePosts', array(
-				'ajaxurl'	=> admin_url( 'admin-ajax.php' ),
-				'start'		=> $start
-			));
+			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), array( 'jquery' ) );
+			wp_localize_script( 'sortable-posts-js', 'WP_API_Settings', $settings );
 
 			// CSS
 			wp_enqueue_style( 'sortable-posts-css', plugins_url( '/sortable-posts-wp/assets/css/sortable-posts.css' ) );
@@ -293,9 +293,9 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		public function status_update_html()
 		{
 			?>
-			<div id="sortable-posts-status" class="updated">
-				<strong id="sortable-posts-message">Status Update Message</strong>
-				<button class="button button-primary">Try Again</button>
+			<div id="sortable-posts-status">
+				<strong id="sortable-posts-status-head"></strong>
+				<div id="sortable-posts-status-message"></div>
 			</div>
 			<?php
 		}
