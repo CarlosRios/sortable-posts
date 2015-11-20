@@ -6,22 +6,26 @@ jQuery(document).ready(function($)
 		statusHead	= statusBox.find( '#sortable-posts-status-head' ),
 		statusMsg	= statusBox.find( '#sortable-posts-status-message' );
 
+	// Create helper so row columns maintain their width.
+	var sortablePostsFixHelper = function(e, ui)
+	{
+		ui.children().each(function() {
+			$(this).width($(this).width());
+		});
+		return ui;
+	};
+
 	// Make list sortable.
 	list.sortable({
 		handle: '.column-sortable-posts-order',
 		placeholder: 'sortable-posts-placeholder',
-		helper: function( e, ui ) {
-			ui.children().each(function() {
-				$(this).width( $(this).width() );
-			});
-			return ui;
-		},
+		helper: sortablePostsFixHelper,
 		forcePlaceholderSize: true,
 		forceHelperSize: true,
 		start: function(e, ui ) {
 			ui.placeholder.height(ui.helper.outerHeight());
 		},
-	});
+	}).disableSelection();
 
 	// Update order.
 	list.on( 'sortupdate', function( event, ui )

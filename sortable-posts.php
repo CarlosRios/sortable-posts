@@ -171,7 +171,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 					border-left-color: <?php echo $colors[3]; ?>;
 				}
 				.sortable-posts-placeholder{
-					background: <?php echo $colors[3]; ?>;
+					background: <?php echo $colors[3]; ?> !important;
 				}
 			</style>
 			<?php

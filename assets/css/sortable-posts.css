@@ -30,9 +30,7 @@ body.sortable-posts .wp-list-table .column-sortable-posts-order{
 	text-align: center;
 	border-right: 1px solid #E1E1E1;
 }
-body.sortable-posts .wp-list-table #the-list .sortable-posts-placeholder{
-	z-index: 999;
-}
+
 #sortable-posts-status{
 	display: none;
 	opacity: 0;
