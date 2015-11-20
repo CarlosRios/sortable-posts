@@ -23,11 +23,76 @@ body.sortable-posts .wp-list-table #the-list tr:hover .sortable-posts-order{
 body.sortable-posts .wp-list-table #the-list tr.ui-sortable-helper{
 	background: #ffffff;
 	box-shadow: 0 3px 4px rgba(0,0,0, 0.2);
+	-webkit-box-shadow: 0 3px 4px rgba(0,0,0, 0.2);
+	-moz-box-shadow: 0 3px 4px rgba(0,0,0, 0.2);
 }
 body.sortable-posts .wp-list-table .column-sortable-posts-order{
 	text-align: center;
 	border-right: 1px solid #E1E1E1;
 }
-body.sortable-posts .wp-list-table #the-list .sortable-posts-placeholder{
+
+#sortable-posts-status{
+	display: none;
+	opacity: 0;
+	padding: 5px 20px 10px;
+	position: absolute;
+	width: 300px;
+	top: 30px;
+	right: 50%;
+	margin-right: -150px;
 	z-index: 999;
+	background: #FFF;
+	border-left-width: 4px;
+	border-left-style: solid;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	transition: all 0.1s linear;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+}
+#sortable-posts-message{
+	display: block;
+	padding: 5px 0 5px;
+}
+.sp-visible{
+	display: block !important;
+}
+
+/**
+ * Animations
+ */
+.animated {
+  animation-duration: 0.8s;
+  animation-fill-mode: both;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fadeInUp {
+  animation-name: fadeInUp;
+}
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+.fadeOutDown {
+  animation-name: fadeOutDown;
 }

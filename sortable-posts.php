@@ -56,6 +56,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		public function includes()
 		{
 			require_once( 'includes/class-sp-settings.php' );
+			require_once( 'includes/class-sp-api.php' );
 		}
 
 		/**
@@ -71,6 +72,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			add_action( 'wp_ajax_nopriv_sortable_posts_update_order', array( $this, 'update_order' ) );
 			add_action( 'pre_get_posts', array( $this, 'order_by_sortable_posts' ) );
 			add_filter( 'wp_insert_post_data', array( $this, 'update_order_on_new_post' ), 99, 2 );
+			add_action( 'admin_notices', array( $this, 'status_update_html' ) );
 		}
 
 		/**
@@ -127,13 +129,17 @@ if( ! class_exists( 'SortablePosts' ) ) {
 				$start = 1;
 			}
 			
-			// Javascript
+			// Create settings for localization
+			$settings = array(
+				'root' => esc_url_raw( rest_url() ),
+				'nonce' => wp_create_nonce( 'wp_rest' ),
+				'start'	=> $start
+			);
+
+			// Load scripts
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), 'jquery' );
-			wp_localize_script( 'sortable-posts-js', 'sortablePosts', array(
-				'ajaxurl'	=> admin_url( 'admin-ajax.php' ),
-				'start'		=> $start
-			));
+			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), array( 'jquery' ) );
+			wp_localize_script( 'sortable-posts-js', 'WP_API_Settings', $settings );
 
 			// CSS
 			wp_enqueue_style( 'sortable-posts-css', plugins_url( '/sortable-posts-wp/assets/css/sortable-posts.css' ) );
@@ -165,7 +171,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 					border-left-color: <?php echo $colors[3]; ?>;
 				}
 				.sortable-posts-placeholder{
-					background: <?php echo $colors[3]; ?>;
+					background: <?php echo $colors[3]; ?> !important;
 				}
 			</style>
 			<?php
@@ -210,46 +216,31 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		}
 
 		/**
-		 * Updates the menu order for each post
-		 */
-		function update_order()
-		{
-			global $wpdb;
-			$order = $_POST['order'];
-			$start = $_POST['start'];
-
-			foreach( $order as $id ){
-				$ids[] = str_replace( 'post-', '', $id );
-			}
-
-			$list = join(', ', $ids);
-			$wpdb->query( "SELECT @i:= $start-1" );
-
-			$wpdb->query(
-				"UPDATE wp_posts SET menu_order = ( @i:= @i+1 )
-				WHERE ID IN ( $list ) ORDER BY FIELD( ID, $list );"
-			);
-		}
-
-		/**
 		 * Sets order and orderby properties in WP_Query for sortable types only.
 		 * @var object $query - Instance of WP_Query
 		 */
 		function order_by_sortable_posts( $query )
 		{
-			if( isset( $query->query_vars['post_type'] ) ) {
-				if( in_array( $query->query_vars['post_type'], $this->sortable_types ) )
-				{
-					// User submitted orderby takes priority to allow for override
-					if( !isset( $query->query_vars['orderby'] ) ) {
+			// Check if post type is set and if its sortable
+			if( isset( $query->query_vars['post_type'] ) &&
+				in_array( $query->query_vars['post_type'], $this->sortable_types ) ) {
+				
+				// Override on admin
+				if( is_admin() ) {
+					$query->set( 'orderby', 'menu_order' );
+					$query->set( 'order', 'ASC' );
+				} else {
+					// User submitted orderby takes priority to allow for override in frontend
+					if( ! isset( $query->query_vars['orderby'] ) ) {
 						$query->set( 'orderby', 'menu_order' );
 					}
 					
-					// User submitted order takes priority to allow for override
-					if( !isset( $query->query_vars['order'] ) ) {
+					// User submitted order takes priority to allow for override in frontend
+					if( ! isset( $query->query_vars['order'] ) ) {
 						$query->set( 'order', 'ASC');
 					}
 				}
+				
 			}
 		}
 
@@ -272,7 +263,20 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			}
 
 			return $data;
-		}	
+		}
+
+		/**
+		 * Renders a status update message
+		 */
+		public function status_update_html()
+		{
+			?>
+			<div id="sortable-posts-status">
+				<strong id="sortable-posts-status-head"></strong>
+				<div id="sortable-posts-status-message"></div>
+			</div>
+			<?php
+		}
 
 	}
 
