@@ -131,9 +131,9 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			
 			// Load scripts
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'backbone' );
 			wp_enqueue_script( 'underscore' );
-			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), array( 'jquery', 'backbone', 'underscore' ) );
+			wp_enqueue_script( 'backbone' );
+			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), array( 'jquery', 'underscore', 'backbone' ) );
 
 			// Localize the script
 			wp_localize_script( 'sortable-posts-js', 'sortablePosts', array(
