@@ -72,6 +72,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			add_action( 'wp_ajax_nopriv_sortable_posts_update_order', array( $this, 'update_order' ) );
 			add_action( 'pre_get_posts', array( $this, 'order_by_sortable_posts' ) );
 			add_filter( 'wp_insert_post_data', array( $this, 'update_order_on_new_post' ), 99, 2 );
+			add_action( 'admin_notices', array( $this, 'status_update_html' ) );
 		}
 
 		/**
@@ -128,9 +129,13 @@ if( ! class_exists( 'SortablePosts' ) ) {
 				$start = 1;
 			}
 			
-			// Javascript
+			// Load scripts
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), 'jquery' );
+			wp_enqueue_script( 'backbone' );
+			wp_enqueue_script( 'underscore' );
+			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), array( 'jquery', 'backbone', 'underscore' ) );
+
+			// Localize the script
 			wp_localize_script( 'sortable-posts-js', 'sortablePosts', array(
 				'ajaxurl'	=> admin_url( 'admin-ajax.php' ),
 				'start'		=> $start
@@ -280,7 +285,20 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			}
 
 			return $data;
-		}	
+		}
+
+		/**
+		 * Renders a status update message
+		 */
+		public function status_update_html()
+		{
+			?>
+			<div id="sortable-posts-status" class="updated">
+				<strong id="sortable-posts-message">Status Update Message</strong>
+				<button class="button button-primary">Try Again</button>
+			</div>
+			<?php
+		}
 
 	}
 

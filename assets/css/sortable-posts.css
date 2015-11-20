@@ -31,3 +31,25 @@ body.sortable-posts .wp-list-table .column-sortable-posts-order{
 body.sortable-posts .wp-list-table #the-list .sortable-posts-placeholder{
 	z-index: 999;
 }
+#sortable-posts-status{
+	padding: 5px 20px 10px;
+	margin: 0 !important;
+	position: absolute;
+	bottom: 50px;
+	right: 50px;
+	z-index: 999;
+	background: #FFF;
+	border-left-width: 4px;
+	border-left-style: solid;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	transition: all 0.1s linear;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+}
+#sortable-posts-message{
+	display: block;
+	padding: 5px 0 5px;
+}
