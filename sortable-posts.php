@@ -216,28 +216,6 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		}
 
 		/**
-		 * Updates the menu order for each post
-		 */
-		function update_order()
-		{
-			global $wpdb;
-			$order = $_POST['order'];
-			$start = $_POST['start'];
-
-			foreach( $order as $id ){
-				$ids[] = str_replace( 'post-', '', $id );
-			}
-
-			$list = join(', ', $ids);
-			$wpdb->query( "SELECT @i:= $start-1" );
-
-			$wpdb->query(
-				"UPDATE wp_posts SET menu_order = ( @i:= @i+1 )
-				WHERE ID IN ( $list ) ORDER BY FIELD( ID, $list );"
-			);
-		}
-
-		/**
 		 * Sets order and orderby properties in WP_Query for sortable types only.
 		 * @var object $query - Instance of WP_Query
 		 */
