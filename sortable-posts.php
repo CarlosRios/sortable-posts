@@ -195,8 +195,9 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function manage_custom_column( $column )
 		{
+			global $post;
+			
 			if( $column == 'sortable-posts-order' ){
-				$post = get_post( $post_ID );
 				echo '<strong class="sortable-posts-order-position">' . $post->menu_order . '</strong>';
 			}
 		}
