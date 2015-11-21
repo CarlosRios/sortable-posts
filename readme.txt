@@ -21,6 +21,7 @@ Documentation can be found here.
 [https://github.com/CarlosRios/sortable-posts-wp](https://github.com/CarlosRios/sortable-posts-wp)  
 
 == Installation ==
+Sortable Posts requires the REST API that is currently being merged into 4.4.
 
 1. Navigate to 'Add New' in the plugins dashboard
 2. Navigate to the 'Upload' area
@@ -50,5 +51,10 @@ No, currently it does not support the built in post types.
 
 == Changelog ==
 
+= 0.1.1 =
+ - updated plugin to use REST API to power its ajax.
+ - visual modifications to the post edit screen.
+ - added an alert message when the sort update succeeds or fails.
+
 = 0.1.0 =
-initial commit for plugin version
+ - initial commit for plugin version

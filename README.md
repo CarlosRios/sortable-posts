@@ -9,7 +9,7 @@ Sortable Posts is a small plugin for WordPress that adds sortability to the post
 ![demo](https://github.com/CarlosRios/sortable-posts-wp/blob/master/assets/images/sortable_posts.gif)
 
 ## Installation
-To install Sortable Posts, unzip the "sortable-posts" folder to your plugins directory, and activate.
+Sortable Posts requires the REST API that is currently being merged into 4.4. To install Sortable Posts, unzip the "sortable-posts" folder to your plugins directory, and activate.
 
 ## What Sortable Posts Does
 Sortable Posts updates a list of posts via the menu_order built into WordPress.
@@ -35,6 +35,11 @@ Sortable Posts changes the default 'order_by' parameter of all queries using a p
 ```
 
 ## Recent Changes
+
+### 0.1.1
+ - updated plugin to use REST API to power its ajax.
+ - visual modifications to the post edit screen.
+ - added an alert message when the sort update succeeds or fails.
 
 ### 0.1.0
  - initial commit for plugin version
