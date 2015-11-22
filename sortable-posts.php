@@ -57,6 +57,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		{
 			require_once( 'includes/class-sp-settings.php' );
 			require_once( 'includes/class-sp-api.php' );
+			require_once( 'includes/class-sp-taxonomies.php' );
 		}
 
 		/**
@@ -196,7 +197,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		function manage_custom_column( $column )
 		{
 			global $post;
-			
+
 			if( $column == 'sortable-posts-order' ){
 				echo '<strong class="sortable-posts-order-position">' . $post->menu_order . '</strong>';
 			}
