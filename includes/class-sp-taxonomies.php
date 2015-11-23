@@ -8,7 +8,7 @@
  * @since  0.1.2
  */
 
-class SortablePosts_Taxonomies extends SortablePosts {
+class SortablePosts_Taxonomies {
 
 	/**
 	 * Stores an array of sortable taxonomies
