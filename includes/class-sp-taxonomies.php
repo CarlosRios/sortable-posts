@@ -8,13 +8,13 @@
  * @since  0.1.2
  */
 
-class SortablePosts_Taxonomies {
+class SortablePosts_Taxonomies extends SortablePosts {
 
 	/**
 	 * Stores an array of sortable taxonomies
 	 * @var array
 	 */
-	public $sortable_taxes = array();
+	public $sortable_taxes = array( 'project_type' );
 
 	public function register_hooks()
 	{
@@ -26,10 +26,10 @@ class SortablePosts_Taxonomies {
 		// Add column to each registered taxonomy.
 		foreach( (array) $this->sortable_taxes as $tax )
 		{
-			if( post_type_exists( $tax ) )
+			if( taxonomy_exists( $tax ) )
 			{
 				// Add column.
-				add_filter( "manage_edit-{$tax}_columns", 'create_custom_taxonomy_column' );
+				add_filter( "manage_edit-{$tax}_columns", array( $this, 'create_custom_column' ) );
 
 				// Add html to the row.
 
@@ -44,9 +44,11 @@ class SortablePosts_Taxonomies {
 	 * @param  array $columns - registered taxonomy columns
 	 * @return array $columns
 	 */
-	public function create_custom_taxonomy_column()
+	public function create_custom_taxonomy_column( $columns )
 	{
-		
+		$order = array( 'sortable-posts-order' => '<span class="dashicons dashicons-sort"></span>' );
+		$columns = array_merge( $order, $columns );
+		return $columns;
 	}
 
 	/**
