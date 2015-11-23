@@ -47,12 +47,16 @@ class SortablePosts_Taxonomies extends SortablePosts {
 
 	/**
 	 * Add html to our custom taxonomy column
-	 * @param  $column - specific taxonomy column
+	 * @param  $output column html output
+	 * @param  $column specific taxonomy column
+	 * @param  $term_id id of the current term
 	 */
 	public function manage_custom_taxonomy_column( $output, $column, $term_id )
 	{
+		$term_position = get_term_meta( $term_id, 'term_order', true );
+
 		if( $column == 'sortable-posts-order' ){
-			$output .= '<strong class="sortable-posts-order-position">' . $term_id . '</strong>';
+			$output .= '<strong class="sortable-posts-order-position">' . $term_position . '</strong>';
 		}
 		return $output;
 	}

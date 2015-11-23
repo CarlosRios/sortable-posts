@@ -156,10 +156,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function add_classes_to_body( $classes )
 		{
-			$screen = get_current_screen();
-			if( $screen->base == 'edit' && in_array( $screen->post_type, $this->sortable_types ) ){
-				$classes .= 'sortable-posts ';
-			}
+			$classes .= 'sortable-posts ';
 			return $classes;
 		}
 
@@ -172,7 +169,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			$user_admin_color = get_user_option( 'admin_color' );
 			$colors = $_wp_admin_css_colors[$user_admin_color]->colors; ?>
 			<style>
-				body.sortable-posts .wp-list-table #the-list tr:hover .sortable-posts-order{
+				.wp-list-table #the-list tr:hover .sortable-posts-order{
 					border-left-color: <?php echo $colors[3]; ?>;
 				}
 				.sortable-posts-placeholder{
