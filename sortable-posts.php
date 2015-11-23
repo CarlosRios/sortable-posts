@@ -69,8 +69,6 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts' ) );
 			add_action( 'admin_head', array( $this, 'add_styles_to_header' ) );
 			add_action( 'admin_body_class', array( $this, 'add_classes_to_body' ) );
-			add_action( 'wp_ajax_sortable_posts_update_order', array( $this, 'update_order' ) );
-			add_action( 'wp_ajax_nopriv_sortable_posts_update_order', array( $this, 'update_order' ) );
 			add_action( 'pre_get_posts', array( $this, 'order_by_sortable_posts' ) );
 			add_filter( 'wp_insert_post_data', array( $this, 'update_order_on_new_post' ), 99, 2 );
 			add_action( 'admin_notices', array( $this, 'status_update_html' ) );
