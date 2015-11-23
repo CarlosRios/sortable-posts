@@ -16,8 +16,13 @@ class SortablePosts_Taxonomies extends SortablePosts {
 	 */
 	public $sortable_taxes = array( 'project_type' );
 
+	/**
+	 * Registers the required hooks
+	 * @return [type] [description]
+	 */
 	public function register_hooks()
 	{
+		// Only loads if this is a Sortable Posts registered taxonomy
 		add_action( 'admin_init', array( $this, 'register_custom_taxonomy_columns' ) );
 	}
 
@@ -29,35 +34,27 @@ class SortablePosts_Taxonomies extends SortablePosts {
 			if( taxonomy_exists( $tax ) )
 			{
 				// Add column.
-				add_filter( "manage_edit-{$tax}_columns", array( $this, 'create_custom_column' ) );
+				add_filter( "manage_edit-{$tax}_columns", array( 'SortablePosts', 'create_custom_column' ), 10, 1 );
 
 				// Add html to the row.
+				add_filter( "manage_{$tax}_custom_column", array( $this, 'manage_custom_taxonomy_column' ), 10, 3 );
 
 				// Remove column sortability for all other columns.
-				//add_filter( "manage_{$tax}_custom_column", 'manage_custom_taxonomy_column', 10, 3 );
+				//
 			}
 		}
-	}
-
-	/**
-	 * Creates the custom taxonomy column
-	 * @param  array $columns - registered taxonomy columns
-	 * @return array $columns
-	 */
-	public function create_custom_taxonomy_column( $columns )
-	{
-		$order = array( 'sortable-posts-order' => '<span class="dashicons dashicons-sort"></span>' );
-		$columns = array_merge( $order, $columns );
-		return $columns;
 	}
 
 	/**
 	 * Add html to our custom taxonomy column
 	 * @param  $column - specific taxonomy column
 	 */
-	public function manage_custom_taxonomy_column()
+	public function manage_custom_taxonomy_column( $output, $column, $term_id )
 	{
-		
+		if( $column == 'sortable-posts-order' ){
+			$output .= '<strong class="sortable-posts-order-position">' . $term_id . '</strong>';
+		}
+		return $output;
 	}
 
 }

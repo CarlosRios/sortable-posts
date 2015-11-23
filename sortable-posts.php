@@ -35,6 +35,12 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		public $version = '0.1.1';
 
 		/**
+		 * Store the current page screen
+		 * @var array
+		 */
+		public $screen = '';
+
+		/**
 		 * List of sortable post types
 		 * @var array
 		 */
@@ -47,7 +53,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		{
 			$this->includes();
 			$this->set_sortable_types();
-			$this->register_hooks();
+			$this->sortable_posts_hooks();
 		}
 
 		/**
@@ -63,7 +69,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		/**
 		 * Registers all of our hooks
 		 */
-		public function register_hooks()
+		public function sortable_posts_hooks()
 		{
 			add_action( 'admin_init', array( $this, 'register_custom_columns' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts' ) );
@@ -103,13 +109,13 @@ if( ! class_exists( 'SortablePosts' ) ) {
 				if( post_type_exists( $type ) )
 				{
 					// Add column.
-					add_filter( "manage_{$type}_posts_columns", array( $this, 'create_custom_column' ) );
+					add_filter( "manage_{$type}_posts_columns", array( __CLASS__, 'create_custom_column' ) );
 
 					// Add html to the row.
-					add_action( "manage_{$type}_posts_custom_column", array( $this, 'manage_custom_column' ) );
+					add_action( "manage_{$type}_posts_custom_column", array( __CLASS__, 'manage_custom_column' ) );
 
 					// Remove column sortability for all other columns.
-					add_filter( "manage_edit-{$type}_sortable_columns", array( $this, 'remove_sortable_columns' ) );
+					add_filter( "manage_edit-{$type}_sortable_columns", array( __CLASS__, 'remove_sortable_columns' ) );
 				}
 			}
 		}
@@ -152,7 +158,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		{
 			$screen = get_current_screen();
 			if( $screen->base == 'edit' && in_array( $screen->post_type, $this->sortable_types ) ){
-				$classes .= 'sortable-posts';
+				$classes .= 'sortable-posts ';
 			}
 			return $classes;
 		}
@@ -181,7 +187,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 * @param  array $columns - registered post type columns
 		 * @return array $columns
 		 */
-		function create_custom_column( $columns )
+		public static function create_custom_column( $columns )
 		{
 			$order = array( 'sortable-posts-order' => '<span class="dashicons dashicons-sort"></span>' );
 			$columns = array_merge( $order, $columns );
@@ -192,7 +198,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 * Add html to our custom column
 		 * @param  $column - specific post type column
 		 */
-		function manage_custom_column( $column )
+		public static function manage_custom_column( $column )
 		{
 			global $post;
 
@@ -209,7 +215,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 * @param  array $columns - registered post type columns
 		 * @return array $columns
 		 */
-		function remove_sortable_columns( $columns )
+		public static function remove_sortable_columns( $columns )
 		{
 			$columns = array();
 			return $columns;
