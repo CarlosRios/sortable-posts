@@ -40,7 +40,7 @@ class SortablePosts_Taxonomies extends SortablePosts {
 				add_filter( "manage_{$tax}_custom_column", array( $this, 'manage_custom_taxonomy_column' ), 10, 3 );
 
 				// Remove column sortability for all other columns.
-				//
+				add_filter( "manage_edit-{$tax}_sortable_columns", array( 'SortablePosts', 'remove_sortable_columns' ) );
 			}
 		}
 	}
