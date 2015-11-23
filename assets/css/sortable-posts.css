@@ -12,21 +12,16 @@
 	padding-right: 12px;
 	text-align: center;
 	border-right: 1px solid #E1E1E1;
-}
-body.sortable-posts .wp-list-table #the-list tr .column-sortable-posts-order{
 	background: #FFF;
 	cursor: move;
 }
-body.sortable-posts .wp-list-table #the-list tr:hover .sortable-posts-order{
-	border-left-color: #2d2d2d;
-}
-body.sortable-posts .wp-list-table #the-list tr.ui-sortable-helper{
+.wp-list-table #the-list tr.ui-sortable-helper{
 	background: #ffffff;
 	box-shadow: 0 3px 4px rgba(0,0,0, 0.2);
 	-webkit-box-shadow: 0 3px 4px rgba(0,0,0, 0.2);
 	-moz-box-shadow: 0 3px 4px rgba(0,0,0, 0.2);
 }
-body.sortable-posts .wp-list-table .column-sortable-posts-order{
+.wp-list-table .column-sortable-posts-order{
 	text-align: center;
 	border-right: 1px solid #E1E1E1;
 }
