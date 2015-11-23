@@ -32,7 +32,7 @@ class SortablePostsAPI extends WP_REST_Controller {
 		register_rest_route( $namespace, '/update', array(
 			'methods'				=> WP_REST_Server::EDITABLE,
 			'callback'				=> array( $this, 'update_item' ),
-			//'permission_callback'	=> array( $this, 'update_item_permissions_check' ),
+			'permission_callback'	=> array( $this, 'update_item_permissions_check' ),
 			'args'					=> $this->get_endpoint_args_for_item_schema( false )
 		));
 	}
