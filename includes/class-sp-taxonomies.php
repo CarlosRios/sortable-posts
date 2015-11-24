@@ -1,6 +1,6 @@
 <?php
 /**
- * Makes taxonomies sortable
+ * Makes taxonomies sortable!
  *
  * @package Sortable Posts For WordPress
  * @category class
@@ -15,7 +15,25 @@ class SortablePosts_Taxonomies {
 	 * @var array
 	 * @since 0.1
 	 */
-	public $sortable_taxes = array( 'project_type' );
+	public $sortable_taxes = array();
+
+	/**
+	 * Sets the sortable taxonomies in the class
+	 * @uses sortable_taxonomies hook provided in themes or plugins.
+	 */
+	public function set_sortable_taxes()
+	{
+		$taxes = get_option( 'sortable_taxonomies', array() );
+
+		// Add backwards compatibility for plugins and themes that use Sortable Posts
+		$taxes = array_unique( array_merge( $taxes, apply_filters( 'sortable_taxonomies', array() ) ) );
+
+		if( is_array( $taxes ) && !empty( $taxes ) ) {
+			$this->sortable_taxes = $taxes;
+		}
+		
+		return;
+	}
 
 	/**
 	 * Registers the required hooks
@@ -150,8 +168,9 @@ class SortablePosts_Taxonomies {
  */
 function init_sp_taxonomies()
 {
-	$object = new SortablePosts_Taxonomies();
-	$object->register_hooks();
+	$taxes = new SortablePosts_Taxonomies();
+	$taxes->set_sortable_taxes();
+	$taxes->register_hooks();
 }
 
 // Get it started
