@@ -56,9 +56,16 @@ class SortablePostsSettings {
 	 */
 	public function create_settings()
 	{
-		add_settings_section( 'settings', 'Main Settings', array( $this, 'settings_description' ), 'sortable_posts' );
-		add_settings_field( 'types', 'Sortable Post Types', array( $this, 'field_handler' ), 'sortable_posts', 'settings', array( 'id' => 'types', 'type' => 'text', 'desc' => 'These post types will magically become sortable!' ) );
+		// Sortable settings section
+		add_settings_section( 'settings', 'Sortable Types', array( $this, 'settings_description' ), 'sortable_posts' );
+
+		// Post type settings
+		add_settings_field( 'sortable-post-types', 'Sortable Post Types', array( $this, 'posts_field_handler' ), 'sortable_posts', 'settings', array( 'id' => 'sortable-post-types', 'type' => 'text', 'desc' => 'These post types will magically become sortable!' ) );
 		register_setting( 'sortable_posts', 'sortable_posts', array( $this, 'sanitize_settings' ) );
+
+		// Taxonomy settings
+		add_settings_field( 'sortable-taxonomy-types', 'Sortable Taxonomies', array( $this, 'taxonomies_field_handler' ), 'sortable_posts', 'settings', array( 'id' => 'sortable-taxonomy-types', 'type' => 'text', 'desc' => 'These taxonomies will magically become sortable!' ) );
+		register_setting( 'sortable_posts', 'sortable_taxonomies', array( $this, 'sanitize_settings' ) );
 	}
 
 	/**
@@ -66,7 +73,7 @@ class SortablePostsSettings {
 	 * @echo string
 	 */
 	public function settings_description() {
-		echo '<p>Choose which post types to use Sortable Posts on.</p>';
+		echo '<p>Choose which types will be sortable.</p>';
 	}
 
 	/**
@@ -74,26 +81,77 @@ class SortablePostsSettings {
 	 * @param array $data - data thats passed in when the field is created
 	 * @echo  $field - echo's the html for this field
 	 */
-	public function field_handler( $data )
+	public function posts_field_handler( $data )
 	{
 		$args = array(
 			'_builtin' => false,
 		);
-		$available_types = get_post_types( $args, 'objects' );
-		$option = get_option( 'sortable_posts', array() ); ?>
+
+		// Get the registered post types and post type option
+		$registered_post_types = get_post_types( $args, 'objects' );
+		$post_type_option = get_option( 'sortable_posts', array() ); ?>
 
 		<fieldset id="sortable-posts-fieldset">
+
 			<?php
-			foreach( (array) $available_types as $type ) :
+			if( !empty( $registered_post_types ) ) :
+			foreach( (array) $registered_post_types as $type ) :
 				$checked = '';
-				if( in_array( $type->name, $option ) ){
+				if( in_array( $type->name, $post_type_option ) ){
 					$checked = 'checked="checked"';
 				} ?>
+
 				<label for="sortable_post_type_<?php echo $type->name; ?>">
+					
 					<input id="sortable_post_type_<?php echo $type->name; ?>" type="checkbox" name="sortable_posts[]" value="<?php echo $type->name; ?>" <?php echo $checked; ?>></input> <?php echo $type->labels->name; ?>
+
 				</label>
+
 				<br>
-			<?php endforeach; ?>
+
+			<?php endforeach; endif; ?>
+
+		</fieldset>
+		
+		<?php
+	}
+
+	/**
+	 * Renders the field's html and description
+	 * @param array $data - data thats passed in when the field is created
+	 * @echo  $field - echo's the html for this field
+	 */
+	public function taxonomies_field_handler( $data )
+	{
+		$args = array(
+			//'_builtin' => false,
+		);
+
+		// Get the registered taxonomies and taxonomy option
+		$registered_taxonomies = get_taxonomies( $args, 'objects' );
+		$taxonomy_option = get_option( 'sortable_taxonomies', array() );
+		?>
+
+		<fieldset id="sortable-taxonomies-fieldset">
+
+			<?php
+			if( !empty( $registered_taxonomies ) ) :
+			foreach( (array) $registered_taxonomies as $tax ) :
+				$checked = '';
+				if( in_array( $tax->name, $taxonomy_option ) ){
+					$checked = 'checked="checked"';
+				} ?>
+
+				<label for="sortable_taxonomy_<?php echo $tax->name; ?>">
+
+					<input id="sortable_taxonomy_<?php echo $tax->name; ?>" type="checkbox" name="sortable_taxonomies[]" value="<?php echo $tax->name; ?>" <?php echo $checked; ?>></input> <?php echo $tax->labels->name; ?>
+
+				</label>
+
+				<br>
+
+			<?php endforeach; endif; ?>
+
 		</fieldset>
 
 	<?php

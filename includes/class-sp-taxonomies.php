@@ -20,7 +20,6 @@ class SortablePosts_Taxonomies {
 	/**
 	 * Registers the required hooks
 	 * @since 0.1
-	 * @return [type] [description]
 	 */
 	public function register_hooks()
 	{
