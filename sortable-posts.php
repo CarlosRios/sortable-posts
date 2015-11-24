@@ -35,12 +35,6 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		public $version = '0.1.1';
 
 		/**
-		 * Store the current page screen
-		 * @var array
-		 */
-		public $screen = '';
-
-		/**
 		 * List of sortable post types
 		 * @var array
 		 */
@@ -133,12 +127,16 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			}else{
 				$start = 1;
 			}
+
+			// Get the object type to send to REST API
+			$obj_type = get_current_screen();
 			
 			// Create settings for localization
 			$settings = array(
-				'root' => esc_url_raw( rest_url() ),
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-				'start'	=> $start
+				'root'		=> esc_url_raw( rest_url() ),
+				'nonce'		=> wp_create_nonce( 'wp_rest' ),
+				'start'		=> $start,
+				'obj_type'	=> $obj_type->base,
 			);
 
 			// Load scripts

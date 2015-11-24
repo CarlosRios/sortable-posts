@@ -5,7 +5,7 @@
  * @package Sortable Posts For WordPress
  * @category class
  * @author Carlos Rios
- * @since  0.1.2
+ * @version 0.1
  */
 
 class SortablePosts_Taxonomies {
@@ -13,11 +13,13 @@ class SortablePosts_Taxonomies {
 	/**
 	 * Stores an array of sortable taxonomies
 	 * @var array
+	 * @since 0.1
 	 */
 	public $sortable_taxes = array( 'project_type' );
 
 	/**
 	 * Registers the required hooks
+	 * @since 0.1
 	 * @return [type] [description]
 	 */
 	public function register_hooks()
@@ -26,6 +28,10 @@ class SortablePosts_Taxonomies {
 		add_action( 'admin_init', array( $this, 'register_custom_taxonomy_columns' ) );
 	}
 
+	/**
+	 * Register sortable taxonomy columns
+	 * @since 0.1
+	 */
 	public function register_custom_taxonomy_columns()
 	{
 		// Add column to each registered taxonomy.
@@ -47,9 +53,10 @@ class SortablePosts_Taxonomies {
 
 	/**
 	 * Add html to our custom taxonomy column
-	 * @param  $output column html output
-	 * @param  $column specific taxonomy column
-	 * @param  $term_id id of the current term
+	 * @param $output column html output
+	 * @param $column specific taxonomy column
+	 * @param $term_id id of the current term
+	 * @since 0.1
 	 */
 	public function manage_custom_taxonomy_column( $output, $column, $term_id )
 	{
