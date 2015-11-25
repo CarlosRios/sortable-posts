@@ -102,7 +102,7 @@ class SortablePosts_Taxonomies {
 		if ( ! in_array( $order, array('ASC', 'DESC') ) ) {
 			$order = 'ASC';
 		}
-		$orderby = "ORDER BY tm.meta_value {$order}";
+		$orderby = "ORDER BY ABS(tm.meta_value) {$order}";
 
 		if ( ! empty( $clauses['orderby'] ) ) {
 			// insert custom column in front of current column
@@ -111,9 +111,6 @@ class SortablePosts_Taxonomies {
 			// sort by custom sort column and name
 			$clauses['orderby'] = "{$orderby}, name";
 		}
-
-		// Add where clause
-		//$clauses['where'] .= " AND tm.meta_key = 'term_order'";
 
 		return $clauses;
 	}
@@ -130,7 +127,13 @@ class SortablePosts_Taxonomies {
 		$term_position = get_term_meta( $term_id, 'term_order', true );
 
 		if( $column == 'sortable-posts-order' ) {
-			$output .= '<strong class="sortable-posts-order-position">' . $term_position . '</strong>';
+
+			// Display nothing if term_position is equal to nothing
+			if( $term_position == 0 ) {
+				$term_position = '';
+			}
+
+			$output .= sprintf( '<strong class="sortable-posts-order-position">%1$s</strong>', $term_position );
 		}
 
 		return $output;
@@ -156,8 +159,9 @@ class SortablePosts_Taxonomies {
 			// Gather previously added terms to count them
 			$terms = get_terms( $taxonomy, $args );
 			$term_count = count( $terms );
+			$term_count = abs( $term_count + 1 );
 
-			add_term_meta( $term_id, 'term_order', $term_count + 1, true );
+			add_term_meta( $term_id, 'term_order', $term_count, true );
 		}
 		return;
 	}

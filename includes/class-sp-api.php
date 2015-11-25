@@ -175,8 +175,12 @@ class SortablePostsAPI extends WP_REST_Controller {
 	protected function update_taxonomy_sort_order()
 	{
 		foreach( (array) $this->order as $term_id ) {
+			// Get the position in the array
 			$position = array_search( $term_id, $this->order );
-			update_term_meta( $term_id, 'term_order', $position + 1 );
+			$position = abs( $position + 1 );
+
+			// Update the term_order
+			update_term_meta( $term_id, 'term_order', $position );
 		}
 		return;
 	}
