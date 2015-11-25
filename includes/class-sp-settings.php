@@ -7,7 +7,7 @@
  * @author Carlos Rios
  */
 
-class SortablePostsSettings {
+class SortablePosts_Settings {
 
 	public function __construct()
 	{
@@ -185,4 +185,4 @@ class SortablePostsSettings {
 
 }
 
-return new SortablePostsSettings();
+return new SortablePosts_Settings();

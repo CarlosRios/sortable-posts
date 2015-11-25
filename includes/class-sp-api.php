@@ -8,7 +8,7 @@
  * @since  0.1.1
  */
 
-class SortablePostsAPI extends WP_REST_Controller {
+class SortablePosts_API extends WP_REST_Controller {
 
 	/**
 	 * Stores the order
@@ -204,7 +204,7 @@ class SortablePostsAPI extends WP_REST_Controller {
  */
 function init_sortable_posts_api()
 {
-	$controller = new SortablePostsAPI;
+	$controller = new SortablePosts_API;
 	$controller->register_routes();
 }
 
