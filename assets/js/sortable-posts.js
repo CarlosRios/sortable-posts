@@ -41,6 +41,7 @@ jQuery(document).ready(function($)
 			data: {
 				order: order,
 				start: WP_API_Settings.start,
+				object_type: WP_API_Settings.obj_type,
 			}
 		}).done( function( response ) {
 

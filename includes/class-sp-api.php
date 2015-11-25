@@ -23,6 +23,12 @@ class SortablePostsAPI extends WP_REST_Controller {
 	public $start = '';
 
 	/**
+	 * Stores the type of object we're saving
+	 * @var string
+	 */
+	public $obj_type = '';
+
+	/**
 	 * Registers the REST API endpoints
 	 */
 	public function register_routes()
@@ -51,7 +57,7 @@ class SortablePostsAPI extends WP_REST_Controller {
 		$data = $this->update_sort_order();
 
 		// Send error if update fails		
-		if ( $data == false ) {
+		if ( $data === false ) {
 			$response = array(
 				'status'		=> 400,
 				'after_message'	=> '',
@@ -106,34 +112,65 @@ class SortablePostsAPI extends WP_REST_Controller {
 		$order_array = array();
 		$order = $request->get_param( 'order' );
 
-		if( ! is_array( $order ) ) {
+		if( ! is_array( $order ) || empty( $order ) ) {
 			return new WP_Error( 'order-not-array', __( 'Order needs to be an array', 'sortable-posts' ), 500 );
 		}
 
 		// Store posts in object's order variable
 		foreach( (array) $order as $post_id ){
 			$post_id = sanitize_key( $post_id );
-			$order_array[] = str_replace( 'post-', '', $post_id );
+			$order_array[] = str_replace( array( 'post-', 'tag-' ), '', $post_id );
 		}
 
-		// Store order in object as a comma separated string
-		$this->order = implode( ', ', $order_array );
+		// Store order in object as an array
+		$this->order = $order_array;
 
 		// Sanitize start key and store in object
 		$this->start = sanitize_key( $request->get_param( 'start' ) );
+
+		// Set the object types
+		$this->obj_type = sanitize_key( $request->get_param( 'object_type' ) );
 	}
 
 	/**
-	 * Updates the sort order in the database
-	 * @return WP_Error|array
+	 * Returns the correct method for the type of object being sorted 
+	 * @return WP_Error|sort update method
 	 */
 	protected function update_sort_order()
+	{
+		if( $this->obj_type == 'edit' ) {
+
+			return $this->update_post_sort_order();
+
+		} elseif( $this->obj_type == 'edit-tags' ) {
+
+			return $this->update_taxonomy_sort_order();
+
+		} else {
+
+			$response = array(
+				'status'		=> 400,
+				'after_message'	=> '',
+			);
+			return new WP_Error( 'not-sortable', __( 'Sorry this object type is not sortable at the moment.', 'sortable-posts' ), $response );
+		
+		}
+	}
+
+	/**
+	 * Updates the sort order for the post
+	 * @return WP_Error|array
+	 */
+	protected function update_post_sort_order()
 	{
 		global $wpdb;
 
 		// Select items based on the starting point
 		$wpdb->query( "SELECT @i:= $this->start-1" );
 		
+		// Order needs to be a comma separated string
+		$this->order = implode( ', ', $this->order );
+
 		// Insert the new order
 		$new_order = $wpdb->query(
 			"UPDATE wp_posts SET menu_order = ( @i:= @i+1 )
@@ -141,6 +178,23 @@ class SortablePostsAPI extends WP_REST_Controller {
 		, ARRAY_A );
 
 		return $new_order;
+	}
+
+	/**
+	 * Updates the sort order for taxonomies
+	 * @return WP_Error|array
+	 */
+	protected function update_taxonomy_sort_order()
+	{
+		foreach( (array) $this->order as $term_id ) {
+			// Get the position in the array
+			$position = array_search( $term_id, $this->order );
+			$position = abs( $position + 1 );
+
+			// Update the term_order
+			update_term_meta( $term_id, 'term_order', $position );
+		}
+		return;
 	}
 
 }
