@@ -95,21 +95,28 @@ class SortablePostsSettings {
 
 			<?php
 			if( !empty( $registered_post_types ) ) :
-			foreach( (array) $registered_post_types as $type ) :
-				$checked = '';
-				if( in_array( $type->name, $post_type_option ) ){
-					$checked = 'checked="checked"';
-				} ?>
+			
+				foreach( (array) $registered_post_types as $type ) :
 
-				<label for="sortable_post_type_<?php echo $type->name; ?>">
-					
-					<input id="sortable_post_type_<?php echo $type->name; ?>" type="checkbox" name="sortable_posts[]" value="<?php echo $type->name; ?>" <?php echo $checked; ?>></input> <?php echo $type->labels->name; ?>
+					// Create checked variable
+					$checked = '';
 
-				</label>
+					// Check if post type is in post type option
+					if( in_array( $type->name, $post_type_option ) ) {
+						$checked = 'checked="checked"';
+					} ?>
 
-				<br>
+					<label for="sortable_post_type_<?php echo $type->name; ?>">
+						
+						<input id="sortable_post_type_<?php echo $type->name; ?>" type="checkbox" name="sortable_posts[]" value="<?php echo $type->name; ?>" <?php echo $checked; ?>></input> <?php echo $type->labels->name; ?>
 
-			<?php endforeach; endif; ?>
+					</label>
+
+					<br>
+
+				<?php endforeach; ?>
+
+			<?php endif; ?>
 
 		</fieldset>
 		
@@ -123,12 +130,8 @@ class SortablePostsSettings {
 	 */
 	public function taxonomies_field_handler( $data )
 	{
-		$args = array(
-			//'_builtin' => false,
-		);
-
 		// Get the registered taxonomies and taxonomy option
-		$registered_taxonomies = get_taxonomies( $args, 'objects' );
+		$registered_taxonomies = get_taxonomies( '', 'objects' );
 		$taxonomy_option = get_option( 'sortable_taxonomies', array() );
 		?>
 
@@ -136,21 +139,28 @@ class SortablePostsSettings {
 
 			<?php
 			if( !empty( $registered_taxonomies ) ) :
-			foreach( (array) $registered_taxonomies as $tax ) :
-				$checked = '';
-				if( in_array( $tax->name, $taxonomy_option ) ){
-					$checked = 'checked="checked"';
-				} ?>
 
-				<label for="sortable_taxonomy_<?php echo $tax->name; ?>">
+				foreach( (array) $registered_taxonomies as $tax ) :
 
-					<input id="sortable_taxonomy_<?php echo $tax->name; ?>" type="checkbox" name="sortable_taxonomies[]" value="<?php echo $tax->name; ?>" <?php echo $checked; ?>></input> <?php echo $tax->labels->name; ?>
+					// Create checked variable
+					$checked = '';
 
-				</label>
+					// Check if taxonomy is in taxonomy option
+					if( !empty( $taxonomy_option ) && in_array( $tax->name, $taxonomy_option ) ){
+						$checked = 'checked="checked"';
+					} ?>
 
-				<br>
+					<label for="sortable_taxonomy_<?php echo $tax->name; ?>">
 
-			<?php endforeach; endif; ?>
+						<input id="sortable_taxonomy_<?php echo $tax->name; ?>" type="checkbox" name="sortable_taxonomies[]" value="<?php echo $tax->name; ?>" <?php echo $checked; ?>></input> <?php echo $tax->labels->name; ?>
+
+					</label>
+
+					<br>
+
+				<?php endforeach; ?>
+
+			<?php endif; ?>
 
 		</fieldset>
 

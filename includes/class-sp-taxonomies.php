@@ -41,7 +41,6 @@ class SortablePosts_Taxonomies {
 	 */
 	public function register_hooks()
 	{
-		// Only loads if this is a Sortable Posts registered taxonomy
 		add_action( 'admin_init', array( $this, 'register_custom_taxonomy_hooks' ) );
 		add_filter( 'terms_clauses', array( $this, 'orderby_sortable_taxonomies' ), 10, 3 );
 	}
@@ -52,6 +51,8 @@ class SortablePosts_Taxonomies {
 	 */
 	public function register_custom_taxonomy_hooks()
 	{
+		add_filter( 'pre_update_option_sortable_taxonomies', array( $this, 'check_sortable_taxonomy_terms_for_term_meta' ), 10, 2 );
+
 		// Add column to each registered taxonomy.
 		foreach( (array) $this->sortable_taxes as $tax )
 		{
@@ -83,7 +84,7 @@ class SortablePosts_Taxonomies {
 	{
 		global $wpdb;
 
-		// Need to rework this
+		// Need to rework this. Allows users to override orderby param
 		if ( isset( $args['orderby'] ) && $args['orderby'] !== 'name' ){
 			return $clauses;
 		}
@@ -94,7 +95,7 @@ class SortablePosts_Taxonomies {
 		}
 
 		// Join termmeta to terms tables
-		$clauses['join'] .= " INNER JOIN {$wpdb->termmeta} tm ON t.term_id = tm.term_id";
+		$clauses['join'] .= " INNER JOIN {$wpdb->termmeta} tm ON (t.term_id = tm.term_id AND tm.meta_key = 'term_order')";
 
 		// Set order to default to ascending
 		$order = strtoupper( $args['order'] );
@@ -111,8 +112,8 @@ class SortablePosts_Taxonomies {
 			$clauses['orderby'] = "{$orderby}, name";
 		}
 
-		// Add to WHERE clause
-		$clauses['where'] .= " AND tm.meta_key = 'term_order'";
+		// Add where clause
+		//$clauses['where'] .= " AND tm.meta_key = 'term_order'";
 
 		return $clauses;
 	}
@@ -159,6 +160,51 @@ class SortablePosts_Taxonomies {
 			add_term_meta( $term_id, 'term_order', $term_count + 1, true );
 		}
 		return;
+	}
+
+	/**
+	 * Checks for registered taxonomy terms with missing term_order meta
+	 * and adds the meta if it is not present
+	 * @return array
+	 */
+	public function check_sortable_taxonomy_terms_for_term_meta( $new_value, $old_value )
+	{
+		// If values are not arrays then save an array
+		if( ! is_array( $new_value ) || ! is_array( $old_value ) ) {
+			return array();
+		}
+
+		// Compare arrays to see if they have changed
+		$array_compare = array_diff( $new_value, $old_value );
+
+		// Continue if arrays are different
+		if( ! empty( $array_compare ) ) {
+
+			// Search for missing term_meta if values have changed
+			foreach( (array) $array_compare as $taxonomy ) {
+
+				// Get the terms for this taxonomy
+				$terms = get_terms( $taxonomy, array( 'hide_empty' => 0 ) );
+
+				if( ! empty( $terms ) ) {
+					// Search terms for term_order meta
+					foreach( $terms as $term ) {
+						$term_order = get_term_meta( $term->term_id, 'term_order', $single = true );
+
+						// If the term_order is empty then add the metadata
+						// Need to rework this to add default value as increment of the highest previous value
+						if( empty( $term_order ) ) {
+							add_term_meta( $term->term_id, 'term_order', '0', true );
+						}
+					}
+				}
+
+			}
+
+		}
+
+		// Save new value
+		return $new_value;
 	}
 
 }
