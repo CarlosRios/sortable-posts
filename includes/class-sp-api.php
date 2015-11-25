@@ -133,15 +133,27 @@ class SortablePostsAPI extends WP_REST_Controller {
 	}
 
 	/**
-	 * Updates the sort order in the database
-	 * @return WP_Error|array
+	 * Returns the correct method for the type of object being sorted 
+	 * @return WP_Error|sort update method
 	 */
 	protected function update_sort_order()
 	{
 		if( $this->obj_type == 'edit' ) {
+
 			return $this->update_post_sort_order();
+
 		} elseif( $this->obj_type == 'edit-tags' ) {
+
 			return $this->update_taxonomy_sort_order();
+
+		} else {
+
+			$response = array(
+				'status'		=> 400,
+				'after_message'	=> '',
+			);
+			return new WP_Error( 'not-sortable', __( 'Sorry this object type is not sortable at the moment.', 'sortable-posts' ), $response );
+		
 		}
 	}
 
