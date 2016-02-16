@@ -14,14 +14,14 @@ Sortable Posts is a small plugin for WordPress that adds sortability to post typ
 == Description ==
 Sortable Posts uses and easy to use drag and drop ui to allow users to update the order of posts and taxonomy terms. Sortable Posts automatically arranges your posts and taxonomy terms on the frontend to match the order on the backend as well.
 
-## Using Sortable Posts In Your Theme / Plugin
+** Using Sortable Posts In Your Theme / Plugin **
 Sortable Posts currently allows users to add post types to the list of sortable post types and taxonomies by either adding them in the options panel or by adding them via a custom filter. Should you want to add them via a filter you can use the `sortable_post_types` for posts and the `sortable_taxonomies` filter for taxonomies.
 
 Documentation can be found here.  
 [https://github.com/CarlosRios/sortable-posts-wp](https://github.com/CarlosRios/sortable-posts-wp)  
 
 == Installation ==
-Sortable Posts requires the REST API that is currently being merged into 4.4.
+Sortable Posts requires the WP REST API that is a part of WordPress core as of 4.4.
 
 1. Navigate to 'Add New' in the plugins dashboard
 2. Navigate to the 'Upload' area
@@ -37,7 +37,7 @@ Sortable Posts requires the REST API that is currently being merged into 4.4.
 
 == Frequently Asked Questions ==
 
-= How do I work it? =
+= How do I use it? =
 Navigate to the Sortable Post Types screen under the WordPress Settings tab and choose the post types you want to make sortable.
 
 = Does it work with built in WordPress post types? =
@@ -54,6 +54,9 @@ Yes! Sortable Posts requires at least WordPress 4.4 to make use of the new term 
 4. Sortable Taxonomies
 
 == Changelog ==
+
+= 1.1 =
+ - remove using WP_REST_Controller class because it was not included in 4.4
 
 = 1.0 =
  - add sortable taxonomies with the help of the WordPress 4.4 term metadata improvements.
