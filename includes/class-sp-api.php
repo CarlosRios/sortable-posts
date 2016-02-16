@@ -5,10 +5,15 @@
  * @package Sortable Posts For WordPress
  * @category class
  * @author Carlos Rios
- * @since  0.1.1
+ * @since  1.0
  */
 
-class SortablePosts_API extends WP_REST_Controller {
+/**
+ * SortablePosts_API class
+ * 
+ * @since  0.1
+ */
+class SortablePosts_API {
 
 	/**
 	 * Stores the order
@@ -39,7 +44,7 @@ class SortablePosts_API extends WP_REST_Controller {
 			'methods'				=> WP_REST_Server::EDITABLE,
 			'callback'				=> array( $this, 'update_item' ),
 			'permission_callback'	=> array( $this, 'update_item_permissions_check' ),
-			'args'					=> $this->get_endpoint_args_for_item_schema( false )
+			'args'					=> array(),
 		));
 	}
 
