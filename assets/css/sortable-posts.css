@@ -5,9 +5,9 @@
 }
 .wp-list-table #the-list .sortable-posts-order{
 	border-left: 4px solid transparent;
-	transition: all 1.0s linear;
-	-webkit-transition: all 1.0s linear;
-	-moz-transition: all 1.0s linear;
+	transition: all 0.1s linear;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
 	padding-left: 8px;
 	padding-right: 12px;
 	text-align: center;
@@ -45,9 +45,9 @@
 	box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 	-webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 	-moz-box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-	transition: all 1.0s linear;
-	-webkit-transition: all 1.0s linear;
-	-moz-transition: all 1.0s linear;
+	transition: all 0.1s linear;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
 }
 #sortable-posts-message{
 	display: block;
