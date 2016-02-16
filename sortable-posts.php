@@ -4,7 +4,7 @@
  * Description: Sortable Posts is a small plugin for WordPress that adds sortability to the post edit screen of any post type you choose.
  * Author: Carlos Rios
  * Author URI: http://www.texaswebsitemanagement.com
- * Version: 1.1
+ * Version: 1.1.1
  * Plugin URI: https://github.com/CarlosRios/sortable-posts-wp
  * License: GPL2+
  *
@@ -20,28 +20,41 @@ if( !defined( 'ABSPATH' ) ) {
 
 if( ! class_exists( 'SortablePosts' ) ) {
 
+	/**
+	 * SortablePosts class
+	 * 
+	 * @since  1.0
+	 */
 	class SortablePosts {
 
 		/**
 		 * Textdomain
+		 *
+		 * @since  1.0
 		 * @var string
 		 */
 		public static $textdomain = 'sortable-posts';
 
 		/**
 		 * Sortable Posts version
+		 *
+		 * @since  1.0
 		 * @var string
 		 */
-		public $version = '1.1';
+		public $version = '1.1.1';
 
 		/**
 		 * List of sortable post types
+		 *
+		 * @since  1.0
 		 * @var array
 		 */
 		public $sortable_types = array();
 
 		/**
 		 * Initiates Sortable Posts
+		 *
+		 * @since  1.0
 		 */
 		public function __construct()
 		{
@@ -52,6 +65,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Includes all necessary files
+		 *
+		 * @since  1.0
 		 */
 		public function includes()
 		{
@@ -62,6 +77,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Registers all of our hooks
+		 *
+		 * @since  1.0
 		 */
 		public function sortable_posts_hooks()
 		{
@@ -76,6 +93,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Sets the sortable post types in the class
+		 *
+		 * @since  1.0
 		 * @uses sortable_posts_types hook provided in themes or plugins.
 		 */
 		function set_sortable_types()
@@ -94,6 +113,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Registers the Sortable Posts custom columns for each post type
+		 *
+		 * @since  1.0
 		 */
 		function register_custom_columns()
 		{
@@ -116,6 +137,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Registers the scripts for Sortable Posts
+		 *
+		 * @since  1.0
 		 */
 		function register_scripts()
 		{
@@ -141,15 +164,17 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 			// Load scripts
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts-wp/assets/js/sortable-posts.js' ), array( 'jquery' ) );
+			wp_enqueue_script( 'sortable-posts-js', plugins_url( '/sortable-posts/assets/js/sortable-posts.js' ), array( 'jquery' ) );
 			wp_localize_script( 'sortable-posts-js', 'WP_API_Settings', $settings );
 
 			// CSS
-			wp_enqueue_style( 'sortable-posts-css', plugins_url( '/sortable-posts-wp/assets/css/sortable-posts.css' ) );
+			wp_enqueue_style( 'sortable-posts-css', plugins_url( '/sortable-posts/assets/css/sortable-posts.css' ) );
 		}
 
 		/**
 		 * Adds class to the body when on a Sortable Posts post type
+		 *
+		 * @since  1.0
 		 * @param array $classes
 		 */
 		function add_classes_to_body( $classes )
@@ -160,6 +185,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Adds admin theme styles to admin header
+		 * 
+		 * @since  1.0
 		 */
 		function add_styles_to_header()
 		{
@@ -179,6 +206,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Creates the custom column
+		 *
+		 * @since  1.0
 		 * @param  array $columns - registered post type columns
 		 * @return array $columns
 		 */
@@ -191,6 +220,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Add html to our custom column
+		 *
+		 * @since  1.0
 		 * @param  $column - specific post type column
 		 */
 		public static function manage_custom_column( $column )
@@ -206,7 +237,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 * Removes all other sortability
 		 *
 		 * Will be removed in later versions once we get that working.
-		 * 
+		 *
+		 * @since  1.0
 		 * @param  array $columns - registered post type columns
 		 * @return array $columns
 		 */
@@ -218,6 +250,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Sets order and orderby properties in WP_Query for sortable types only.
+		 *
+		 * @since  1.0
 		 * @var object $query - Instance of WP_Query
 		 */
 		function order_by_sortable_posts( $query )
@@ -247,6 +281,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Updates the order when a new post is inserted
+		 *
+		 * @since  1.0
 		 * @param  array $data
 		 * @param  array $postarr
 		 * @return array
@@ -268,6 +304,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 		/**
 		 * Renders a status update message
+		 *
+		 * @since  1.0
 		 */
 		public function status_update_html()
 		{

@@ -11,30 +11,37 @@
 /**
  * SortablePosts_API class
  * 
- * @since  0.1
+ * @since  1.0
  */
 class SortablePosts_API {
 
 	/**
 	 * Stores the order
+	 *
+	 * @since  1.0
 	 * @var string
 	 */
 	public $order = '';
 
 	/**
 	 * Stores the starting point for updating the order
+	 * 
+	 * @since  1.0
 	 * @var integer
 	 */
 	public $start = '';
 
 	/**
 	 * Stores the type of object we're saving
+	 * 
+	 * @since  1.0
 	 * @var string
 	 */
 	public $obj_type = '';
 
 	/**
 	 * Registers the REST API endpoints
+	 * @since  1.0
 	 */
 	public function register_routes()
 	{
@@ -50,6 +57,8 @@ class SortablePosts_API {
 
 	/**
 	 * Update the order of the posts
+	 *
+	 * @since  1.0
 	 * @param  WP_REST_Request $request
 	 * @return WP_Error|WP_REST_Response
 	 */
@@ -86,7 +95,8 @@ class SortablePosts_API {
 
 	/**
 	 * Check if a given request has access to create items
-	 *
+	 * 
+	 * @since  1.0
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|bool
 	 */
@@ -98,6 +108,7 @@ class SortablePosts_API {
 	/**
 	 * Check if a given request has access to update a specific item
 	 *
+	 * @since  1.0
 	 * @param WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|bool
 	 */
@@ -109,6 +120,7 @@ class SortablePosts_API {
 	/**
 	 * Prepare the request for database entry
 	 *
+	 * @since  1.0
 	 * @param WP_REST_Request $request Request object
 	 * @return WP_Error|object $prepared_item
 	 */
@@ -139,6 +151,8 @@ class SortablePosts_API {
 
 	/**
 	 * Returns the correct method for the type of object being sorted 
+	 *
+	 * @since  1.0
 	 * @return WP_Error|sort update method
 	 */
 	protected function update_sort_order()
@@ -164,6 +178,8 @@ class SortablePosts_API {
 
 	/**
 	 * Updates the sort order for the post
+	 *
+	 * @since  1.0
 	 * @return WP_Error|array
 	 */
 	protected function update_post_sort_order()
@@ -187,6 +203,8 @@ class SortablePosts_API {
 
 	/**
 	 * Updates the sort order for taxonomies
+	 *
+	 * @since  1.0
 	 * @return WP_Error|array
 	 */
 	protected function update_taxonomy_sort_order()
@@ -206,6 +224,8 @@ class SortablePosts_API {
 
 /**
  * Initiates the API
+ *
+ * @since  1.0
  */
 function init_sortable_posts_api()
 {

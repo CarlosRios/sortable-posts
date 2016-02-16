@@ -8,17 +8,25 @@
  * @version 1.0
  */
 
+/**
+ * SortablePosts_Taxonomies class
+ * 
+ * @since  1.0
+ */
 class SortablePosts_Taxonomies {
 
 	/**
 	 * Stores an array of sortable taxonomies
+	 *
+	 * @since  1.0
 	 * @var array
-	 * @since 1.0
 	 */
 	public $sortable_taxes = array();
 
 	/**
 	 * Sets the sortable taxonomies in the class
+	 *
+	 * @since  1.0
 	 * @uses sortable_taxonomies hook provided in themes or plugins.
 	 */
 	public function set_sortable_taxes()
@@ -37,6 +45,7 @@ class SortablePosts_Taxonomies {
 
 	/**
 	 * Registers the required hooks
+	 * 
 	 * @since 1.0
 	 */
 	public function register_hooks()
@@ -47,6 +56,7 @@ class SortablePosts_Taxonomies {
 
 	/**
 	 * Register sortable taxonomy columns
+	 * 
 	 * @since 1.0
 	 */
 	public function register_custom_taxonomy_hooks()
@@ -75,6 +85,8 @@ class SortablePosts_Taxonomies {
 
 	/**
 	 * Used for sorting taxonomies.
+	 *
+	 * @since  1.0
 	 * @param  array  $clauses SQL clauses.
 	 * @param  mixed  $taxonomies Taxonomy name.
 	 * @param  array  $args Query arguments.
@@ -117,10 +129,11 @@ class SortablePosts_Taxonomies {
 
 	/**
 	 * Add html to our custom taxonomy column
+	 *
+	 * @since  1.0
 	 * @param $output column html output
 	 * @param $column specific taxonomy column
 	 * @param $term_id id of the current term
-	 * @since 1.0
 	 */
 	public function manage_custom_taxonomy_column( $output, $column, $term_id )
 	{
@@ -141,6 +154,8 @@ class SortablePosts_Taxonomies {
 
 	/**
 	 * Adds new term information
+	 *
+	 * @since  1.0
 	 * @param  integer $term_id term id
 	 * @param  integer $tt_id term's taxonomy id
 	 */
@@ -169,6 +184,8 @@ class SortablePosts_Taxonomies {
 	/**
 	 * Checks for registered taxonomy terms with missing term_order meta
 	 * and adds the meta if it is not present
+	 *
+	 * @since  1.0
 	 * @return array
 	 */
 	public function check_sortable_taxonomy_terms_for_term_meta( $new_value, $old_value )
@@ -215,6 +232,8 @@ class SortablePosts_Taxonomies {
 
 /**
  * Initiates SortablePosts_Taxonomies
+ *
+ * @since  1.0
  */
 function init_sp_taxonomies()
 {

@@ -7,8 +7,18 @@
  * @author Carlos Rios
  */
 
+/**
+ * SortablePosts_Settings class
+ * 
+ * @since  1.0
+ */
 class SortablePosts_Settings {
 
+	/**
+	 * Hooks when the class is loaded
+	 *
+	 * @since  1.0
+	 */
 	public function __construct()
 	{
 		add_action( 'admin_init', array( $this, 'create_settings' ) );
@@ -17,6 +27,8 @@ class SortablePosts_Settings {
 
 	/**
 	 * Create the menu to be displayed in admin side
+	 *
+	 * @since  1.0
 	 */
 	public function register_menu()
 	{
@@ -25,6 +37,8 @@ class SortablePosts_Settings {
 
 	/**
 	 * Creates the settings and renders them with the correct html
+	 *
+	 * @since  1.0
 	 * @echo html - rendered html for settings page
 	 */
 	public function settings_html()
@@ -53,6 +67,8 @@ class SortablePosts_Settings {
 
 	/**
 	 * Creates the sections & fields for WordPress Settings API and registers the settings.
+	 *
+	 * @since  1.0
 	 */
 	public function create_settings()
 	{
@@ -70,6 +86,8 @@ class SortablePosts_Settings {
 
 	/**
 	 * Echo's the information below the title of the page.
+	 *
+	 * @since  1.0
 	 * @echo string
 	 */
 	public function settings_description() {
@@ -78,6 +96,8 @@ class SortablePosts_Settings {
 
 	/**
 	 * Renders the field's html and description
+	 *
+	 * @since  1.0
 	 * @param array $data - data thats passed in when the field is created
 	 * @echo  $field - echo's the html for this field
 	 */
@@ -125,6 +145,8 @@ class SortablePosts_Settings {
 
 	/**
 	 * Renders the field's html and description
+	 *
+	 * @since  1.0
 	 * @param array $data - data thats passed in when the field is created
 	 * @echo  $field - echo's the html for this field
 	 */
@@ -169,6 +191,8 @@ class SortablePosts_Settings {
 
 	/**
 	 * Cleans up the settings before they're stored in WordPress
+	 *
+	 * @since  1.0
 	 * @param  array $input - the data being stored
 	 * @return array - sanitized values
 	 */

@@ -4,7 +4,7 @@ Author URI: http://www.texaswebsitemanagement.com
 Plugin URI: https://github.com/CarlosRios/sortable-posts-wp
 Tags: custom post order, js post order, page order, post order, posts order, sort custom post types, sort posts, sort taxonomies, sortable taxonomies, sortable post types, wp rest api, wp api
 Requires at least: 4.4
-Tested up to: 4.4
+Tested up to: 4.4.2
 Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -54,6 +54,10 @@ Yes! Sortable Posts requires at least WordPress 4.4 to make use of the new term 
 4. Sortable Taxonomies
 
 == Changelog ==
+
+= 1.1.1 =
+ - fix issue with sortable posts looking for assets in the wrong folder.
+ - update docblocks
 
 = 1.1 =
  - remove using WP_REST_Controller class because it was not included in 4.4
