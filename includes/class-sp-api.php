@@ -90,7 +90,8 @@ class SortablePosts_API {
 		);
 
 		// Return the response
-		return new WP_REST_Response( $response, 200 );
+		// Fix this after 4.5 return new WP_REST_Response( $response, 200 );
+		return json_encode( $response );
 	}
 
 	/**
@@ -190,7 +191,7 @@ class SortablePosts_API {
 		$wpdb->query( "SELECT @i:= $this->start-1" );
 		
 		// Order needs to be a comma separated string
-		$this->order = implode( ', ', $this->order );
+		$this->order = esc_sql( implode( ', ', $this->order ) );
 
 		// Insert the new order
 		$new_order = $wpdb->query(

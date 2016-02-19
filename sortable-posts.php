@@ -4,7 +4,7 @@
  * Description: Sortable Posts is a small plugin for WordPress that adds sortability to the post edit screen of any post type you choose.
  * Author: Carlos Rios
  * Author URI: http://www.texaswebsitemanagement.com
- * Version: 1.1.1
+ * Version: 1.1.2
  * Plugin URI: https://github.com/CarlosRios/sortable-posts-wp
  * License: GPL2+
  *
@@ -41,7 +41,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 * @since  1.0
 		 * @var string
 		 */
-		public $version = '1.1.1';
+		public $version = '1.1.2';
 
 		/**
 		 * List of sortable post types
@@ -322,7 +322,21 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			<?php
 		}
 
+		/**
+		 * Things to fire during activation
+		 *
+		 * @since   1.1.2
+		 * @return
+		 */
+		public static function activate()
+		{
+			flush_rewrite_rules();
+		}
+
 	}
 
 	new SortablePosts();
+
+	// Flush rewrite rules so that WP_REST_API is available after
+	register_activation_hook( __FILE__, array( 'SortablePosts', 'activate' );
 }

@@ -55,8 +55,11 @@ jQuery(document).ready(function($)
 				numberContainer.html( (WP_API_Settings.start * 1) + index );
 			});
 
-			// Parse the json and reflect the message to the user
-			statusMsg.html( response.message );
+			// Parse the json
+			var data = $.parseJSON( response );
+
+			// Inject the json into message element
+			statusMsg.html( data.message );
 
 			// Add classes to the status
 			statusBox.addClass( 'updated sp-visible animated fadeInUp' );
