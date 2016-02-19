@@ -338,5 +338,5 @@ if( ! class_exists( 'SortablePosts' ) ) {
 	new SortablePosts();
 
 	// Flush rewrite rules so that WP_REST_API is available after
-	register_activation_hook( __FILE__, array( 'SortablePosts', 'activate' );
+	register_activation_hook( __FILE__, array( 'SortablePosts', 'activate' ) );
 }
