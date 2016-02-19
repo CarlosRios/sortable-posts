@@ -101,11 +101,16 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		{
 			$types = get_option( 'sortable_posts', array() );
 
-			// Add backwards compatibility for plugins and themes that use Sortable Posts
-			$types = array_unique( array_merge( $types, apply_filters( 'sortable_post_types', array() ) ) );
+			// Check that we're working with an array
+			if( is_array( $types ) ){
 
-			if( is_array( $types ) && !empty( $types ) ) {
-				$this->sortable_types = $types;
+				// Add backwards compatibility for plugins and themes that use Sortable Posts
+				$types = array_unique( array_merge( $types, apply_filters( 'sortable_post_types', array() ) ) );
+
+				if( is_array( $types ) && !empty( $types ) ) {
+					$this->sortable_types = $types;
+				}
+
 			}
 			
 			return;
