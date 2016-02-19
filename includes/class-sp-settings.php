@@ -77,11 +77,11 @@ class SortablePosts_Settings {
 
 		// Post type settings
 		add_settings_field( 'sortable-post-types', 'Sortable Post Types', array( $this, 'posts_field_handler' ), 'sortable_posts', 'settings', array( 'id' => 'sortable-post-types', 'type' => 'text', 'desc' => 'These post types will magically become sortable!' ) );
-		register_setting( 'sortable_posts', 'sortable_posts', array( $this, 'sanitize_settings' ) );
+		register_setting( 'sortable_posts', 'sortable_posts' );
 
 		// Taxonomy settings
 		add_settings_field( 'sortable-taxonomy-types', 'Sortable Taxonomies', array( $this, 'taxonomies_field_handler' ), 'sortable_posts', 'settings', array( 'id' => 'sortable-taxonomy-types', 'type' => 'text', 'desc' => 'These taxonomies will magically become sortable!' ) );
-		register_setting( 'sortable_posts', 'sortable_taxonomies', array( $this, 'sanitize_settings' ) );
+		register_setting( 'sortable_posts', 'sortable_taxonomies' );
 	}
 
 	/**
@@ -187,24 +187,6 @@ class SortablePosts_Settings {
 		</fieldset>
 
 	<?php
-	}
-
-	/**
-	 * Cleans up the settings before they're stored in WordPress
-	 *
-	 * @since  1.0
-	 * @param  array $input - the data being stored
-	 * @return array - sanitized values
-	 */
-	public function sanitize_settings( $input )
-	{
-		$output = array();
-		foreach( $input as $key => $val ) {
-			if( isset ( $input[$key] ) ) {
-				$output[$key] = strip_tags( stripslashes( $input[$key] ) );
-			}
-		}
-		return apply_filters( 'sanitize_settings', $output, $input );
 	}
 
 }
