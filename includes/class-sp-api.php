@@ -195,7 +195,7 @@ class SortablePosts_API {
 
 		// Insert the new order
 		$new_order = $wpdb->query(
-			"UPDATE wp_posts SET menu_order = ( @i:= @i+1 )
+			"UPDATE {$wpdb->posts} SET menu_order = ( @i:= @i+1 )
 			WHERE ID IN ( $this->order ) ORDER BY FIELD( ID, $this->order );"
 		, ARRAY_A );
 
