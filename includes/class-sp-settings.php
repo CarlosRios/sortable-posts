@@ -32,7 +32,9 @@ class SortablePosts_Settings {
 	 */
 	public function register_menu()
 	{
-		add_options_page( __( 'Sortable Posts For WordPress', SortablePosts::$textdomain ), __( 'Sortable Posts', SortablePosts::$textdomain ), 'administrator', 'sortable_posts_settings', array( $this, 'settings_html' ) );
+		if ( apply_filters( 'sortable_posts_settings', true ) ) {
+			add_options_page( __( 'Sortable Posts For WordPress', SortablePosts::$textdomain ), __( 'Sortable Posts', SortablePosts::$textdomain ), 'administrator', 'sortable_posts_settings', array( $this, 'settings_html' ) );
+		}
 	}
 
 	/**

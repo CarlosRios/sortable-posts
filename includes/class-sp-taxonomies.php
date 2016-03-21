@@ -101,8 +101,12 @@ class SortablePosts_Taxonomies {
 			return $clauses;
 		}
 
+		// taxonomies might come as associative array.
+		// make sure $taxonomy_values[0] won't trigger a php warning
+		$taxonomy_values = array_values( $taxonomies );
+
 		// Accept only single taxonomy queries & only if taxonomy is sortable
-		if ( ! in_array( $taxonomies[0], $this->sortable_taxes ) ) {
+		if ( ! in_array( $taxonomy_values[0], $this->sortable_taxes ) ) {
 			return $clauses;
 		}
 
