@@ -28,14 +28,6 @@ if( ! class_exists( 'SortablePosts' ) ) {
 	class SortablePosts {
 
 		/**
-		 * Textdomain
-		 *
-		 * @since  1.0
-		 * @var string
-		 */
-		public static $textdomain = 'sortable-posts';
-
-		/**
 		 * Sortable Posts version
 		 *
 		 * @since  1.0

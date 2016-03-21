@@ -33,7 +33,7 @@ class SortablePosts_Settings {
 	public function register_menu()
 	{
 		if ( apply_filters( 'sortable_posts_settings', true ) ) {
-			add_options_page( __( 'Sortable Posts For WordPress', SortablePosts::$textdomain ), __( 'Sortable Posts', SortablePosts::$textdomain ), 'administrator', 'sortable_posts_settings', array( $this, 'settings_html' ) );
+			add_options_page( __( 'Sortable Posts For WordPress', 'sortable-posts' ), __( 'Sortable Posts', 'sortable-posts' ), 'administrator', 'sortable_posts_settings', array( $this, 'settings_html' ) );
 		}
 	}
 
@@ -49,7 +49,7 @@ class SortablePosts_Settings {
 		?>
 		<div class="wrap">
 
-			<h2><?php _e( 'Sortable Posts For WordPress', SortablePosts::$textdomain ); ?></h2>
+			<h2><?php _e( 'Sortable Posts For WordPress', 'sortable-posts' ); ?></h2>
 
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=sortable_posts_settings&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
