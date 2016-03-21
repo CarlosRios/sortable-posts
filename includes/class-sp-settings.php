@@ -75,14 +75,41 @@ class SortablePosts_Settings {
 	public function create_settings()
 	{
 		// Sortable settings section
-		add_settings_section( 'settings', 'Sortable Types', array( $this, 'settings_description' ), 'sortable_posts' );
+		add_settings_section(
+			'settings',
+			__( 'Sortable Types', 'sortable-posts' ),
+			array( $this, 'settings_description' ),
+			'sortable_posts'
+		);
 
 		// Post type settings
-		add_settings_field( 'sortable-post-types', 'Sortable Post Types', array( $this, 'posts_field_handler' ), 'sortable_posts', 'settings', array( 'id' => 'sortable-post-types', 'type' => 'text', 'desc' => 'These post types will magically become sortable!' ) );
+		add_settings_field(
+			'sortable-post-types',
+			__( 'Sortable Post Types', 'sortable-posts' ),
+			array( $this, 'posts_field_handler' ),
+			'sortable_posts',
+			'settings',
+			array(
+				'id' => 'sortable-post-types',
+				'type' => 'text',
+				'desc' => __( 'These post types will magically become sortable!', 'sortable-posts' )
+			)
+		);
 		register_setting( 'sortable_posts', 'sortable_posts' );
 
 		// Taxonomy settings
-		add_settings_field( 'sortable-taxonomy-types', 'Sortable Taxonomies', array( $this, 'taxonomies_field_handler' ), 'sortable_posts', 'settings', array( 'id' => 'sortable-taxonomy-types', 'type' => 'text', 'desc' => 'These taxonomies will magically become sortable!' ) );
+		add_settings_field(
+			'sortable-taxonomy-types',
+			__( 'Sortable Taxonomies', 'sortable-posts' ),
+			array( $this, 'taxonomies_field_handler' ),
+			'sortable_posts',
+			'settings',
+			array(
+				'id' => 'sortable-taxonomy-types',
+				'type' => 'text',
+				'desc' => __( 'These taxonomies will magically become sortable!', 'sortable-posts' )
+			)
+		);
 		register_setting( 'sortable_posts', 'sortable_taxonomies' );
 	}
 
@@ -93,7 +120,7 @@ class SortablePosts_Settings {
 	 * @echo string
 	 */
 	public function settings_description() {
-		echo '<p>Choose which types will be sortable.</p>';
+		echo '<p>' . __( 'Choose which types will be sortable.', 'sortable-posts' ) . '</p>';
 	}
 
 	/**
