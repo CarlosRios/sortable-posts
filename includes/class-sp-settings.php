@@ -123,9 +123,13 @@ class SortablePosts_Settings {
 					// Create checked variable
 					$checked = '';
 
-					// Check if post type is in post type option
-					if( in_array( $type->name, $post_type_option ) ) {
-						$checked = 'checked="checked"';
+					// Make this post type checked if its in array
+					if( is_array( $post_type_option ) ) {
+
+						if( in_array( $type->name, $post_type_option ) ) {
+							$checked = 'checked="checked"';
+						}
+
 					} ?>
 
 					<label for="sortable_post_type_<?php echo $type->name; ?>">
