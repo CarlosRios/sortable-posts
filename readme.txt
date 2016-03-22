@@ -1,11 +1,11 @@
 === Sortable Posts ===
-Contributors: carlosrios
+Contributors: carlosrios, podpirate
 Author URI: http://www.texaswebsitemanagement.com
 Plugin URI: https://github.com/CarlosRios/sortable-posts-wp
 Tags: custom post order, js post order, page order, post order, posts order, sort custom post types, sort posts, sort taxonomies, sortable taxonomies, sortable post types, wp rest api, wp api
 Requires at least: 4.4
 Tested up to: 4.4.2
-Stable tag: 1.1.1
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Sortable Posts uses and easy to use drag and drop ui to allow users to update th
 Sortable Posts currently allows users to add post types to the list of sortable post types and taxonomies by either adding them in the options panel or by adding them via a custom filter. Should you want to add them via a filter you can use the `sortable_post_types` for posts and the `sortable_taxonomies` filter for taxonomies.
 
 Documentation can be found here.  
-[https://github.com/CarlosRios/sortable-posts-wp](https://github.com/CarlosRios/sortable-posts-wp)  
+[https://github.com/CarlosRios/sortable-posts](https://github.com/CarlosRios/sortable-posts)  
 
 == Installation ==
 Sortable Posts requires the WP REST API that is a part of WordPress core as of 4.4.
@@ -54,6 +54,19 @@ Yes! Sortable Posts requires at least WordPress 4.4 to make use of the new term 
 4. Sortable Taxonomies
 
 == Changelog ==
+
+= 1.1.3 =
+ - fix: settings issue causing php warning when no post types are saved.
+ - fix: settings page for taxonomies works even when given an associative array. Props @mcguffin
+ - fix: change sql to seach in wpdb posts table and not just posts table. Props @mcguffin
+ - improvement: add translation to settings page.
+ - improvement: load settings only on admin side. Props @mcguffin
+ - improvement: add new filter `sortable_posts_settings` which allows devs to remove settings page if set to false. Props @mcguffin
+
+= 1.1.2 =
+ - fix broken saving.
+ - improvement: stop sql from injecting when saving order
+ - add activation hook that flushes rewrite rules for older installs
 
 = 1.1.1 =
  - fix issue with sortable posts looking for assets in the wrong folder.

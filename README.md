@@ -1,7 +1,7 @@
 ## Sortable Posts
 Sortable Posts is a small plugin for WordPress that adds sortability to post types and taxonomies from the admin panel.
 
-**Version:**			1.1.2 
+**Version:**			1.1.3  
 **Requires at least:**	4.4  
 **Tested up to:**		4.4.2  
 **License:**			GPLv2 or later  
@@ -51,7 +51,25 @@ Sortable Posts automatically orders your taxonomy's terms on the frontend as wel
 	$terms = get_terms( 'your_taxonomy', $args );
 ```
 
-## Recent Changes
+## Remove the settings page in your themes
+The settings page can now easily be removed so that your client or users don't have the ability to change which post types and taxonomies are sortable. To remove the settings page simply add the following code to your functions.php template file.
+
+```php
+	function remove_sortable_posts_settings() {
+		return false;
+	}
+	add_filter( 'sortable_posts_settings', 'remove_sortable_posts_settings' );
+```
+
+## Changelog
+
+### 1.1.3
+ - fix: settings issue causing php warning when no post types are saved.
+ - fix: settings page for taxonomies works even when given an associative array. Props @mcguffin
+ - fix: change sql to seach in wpdb posts table and not just posts table. Props @mcguffin
+ - improvement: add translation to settings page.
+ - improvement: load settings only on admin side. Props @mcguffin
+ - improvement: add new filter `sortable_posts_settings` which allows devs to remove settings page if set to false. Props @mcguffin
 
 ### 1.1.2
  - fix broken saving.
