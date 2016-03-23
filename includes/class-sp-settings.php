@@ -49,10 +49,10 @@ class SortablePosts_Settings {
 		?>
 		<div class="wrap">
 
-			<h2><?php _e( 'Sortable Posts For WordPress', 'sortable-posts' ); ?></h2>
+			<h2><?php _e( 'Sortable Posts for WordPress', 'sortable-posts' ); ?></h2>
 
 			<h2 class="nav-tab-wrapper">
-				<a href="?page=sortable_posts_settings&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+				<a href="?page=sortable_posts_settings&tab=settings" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'sortable-posts' ); ?></a>
 			</h2>
 
 			<form method="post" action="options.php">
