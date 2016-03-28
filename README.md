@@ -65,6 +65,7 @@ The settings page can now easily be removed so that your client or users don't h
 
 ### 1.1.4
  - improvement: add translation to settings page tab
+ - fix: body class was being merged with other plugins with use the admin_body_class hook causing the JS to fail.
 
 ### 1.1.3
  - fix: settings issue causing php warning when no post types are saved.
