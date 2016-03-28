@@ -178,7 +178,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function add_classes_to_body( $classes )
 		{
-			$classes .= 'sortable-posts ';
+			$classes .= ' sortable-posts ';
 			return $classes;
 		}
 
