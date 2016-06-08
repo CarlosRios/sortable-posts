@@ -32,6 +32,11 @@ class SortablePosts_Settings {
 	 */
 	public function register_menu()
 	{
+		/**
+		 * Displays the settings page if filter is set to true
+		 *
+		 * @since  1.1.3
+		 */
 		if ( apply_filters( 'sortable_posts_settings', true ) ) {
 			add_options_page( __( 'Sortable Posts For WordPress', 'sortable-posts' ), __( 'Sortable Posts', 'sortable-posts' ), 'administrator', 'sortable_posts_settings', array( $this, 'settings_html' ) );
 		}
