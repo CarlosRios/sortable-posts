@@ -1,9 +1,9 @@
 ## Sortable Posts
 Sortable Posts is a small plugin for WordPress that adds sortability to post types and taxonomies from the admin panel.
 
-**Version:**			1.1.3  
+**Version:**			1.1.4  
 **Requires at least:**	4.4  
-**Tested up to:**		4.4.2  
+**Tested up to:**		4.6 
 **License:**			GPLv2 or later  
 
 ## Installation
@@ -66,6 +66,8 @@ The settings page can now easily be removed so that your client or users don't h
 ### 1.1.4
  - improvement: add translation to settings page tab
  - fix: body class was being merged with other plugins with use the admin_body_class hook causing the JS to fail.
+ - improvement: allow for the use of pages and posts post types as well.
+ - improvement: add support for 4.6
 
 ### 1.1.3
  - fix: settings issue causing php warning when no post types are saved.

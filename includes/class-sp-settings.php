@@ -137,13 +137,16 @@ class SortablePosts_Settings {
 	 */
 	public function posts_field_handler( $data )
 	{
-		$args = array(
-			'_builtin' => false,
-		);
-
 		// Get the registered post types and post type option
-		$registered_post_types = get_post_types( $args, 'objects' );
-		$post_type_option = get_option( 'sortable_posts', array() ); ?>
+		$registered_post_types = get_post_types( '', 'objects' );
+
+		// Remove Media, Nav Menu Items, and Revisions
+		unset( $registered_post_types['attachment'] );
+		unset( $registered_post_types['nav_menu_item'] );
+		unset( $registered_post_types['revision'] );
+
+		// Checked post types
+		$checked_post_types = get_option( 'sortable_posts', array() ); ?>
 
 		<fieldset id="sortable-posts-fieldset">
 
@@ -156,9 +159,9 @@ class SortablePosts_Settings {
 					$checked = '';
 
 					// Make this post type checked if its in array
-					if( is_array( $post_type_option ) ) {
+					if( is_array( $checked_post_types ) ) {
 
-						if( in_array( $type->name, $post_type_option ) ) {
+						if( in_array( $type->name, $checked_post_types ) ) {
 							$checked = 'checked="checked"';
 						}
 

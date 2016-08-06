@@ -4,8 +4,8 @@ Author URI: http://www.texaswebsitemanagement.com
 Plugin URI: https://github.com/CarlosRios/sortable-posts-wp
 Tags: custom post order, js post order, page order, post order, posts order, sort custom post types, sort posts, sort taxonomies, sortable taxonomies, sortable post types, wp rest api, wp api
 Requires at least: 4.4
-Tested up to: 4.4.2
-Stable tag: 1.1.3
+Tested up to: 4.6
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,8 @@ Yes! Sortable Posts requires at least WordPress 4.4 to make use of the new term 
 = 1.1.4 =
  - improvement: add translation to settings page tab
  - fix: body class was being merged with other plugins with use the admin_body_class hook causing the JS to fail.
+ - improvement: allow for the use of pages and posts post types as well.
+ - improvement: add support for 4.6
 
 = 1.1.3 =
  - fix: settings issue causing php warning when no post types are saved.
