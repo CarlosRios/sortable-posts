@@ -141,7 +141,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function register_scripts()
 		{
-			global $post, $wp_query;
+			global $wp_query;
 
 			// Set the starting point for the menu_order.
 			if( isset( $wp_query->query_vars['paged'] ) ) {
@@ -159,6 +159,8 @@ if( ! class_exists( 'SortablePosts' ) ) {
 				'nonce'		=> wp_create_nonce( 'wp_rest' ),
 				'start'		=> $start,
 				'obj_type'	=> $obj_type->base,
+				'taxonomy'	=> (isset($wp_query->query_vars['taxonomy']) ? $wp_query->query_vars['taxonomy'] : ''),
+				'taxonomy_term'	=> (isset($wp_query->query_vars['term']) ? $wp_query->query_vars['term'] : ''),
 			);
 
 			// Load scripts
@@ -225,10 +227,20 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		public static function manage_custom_column( $column )
 		{
-			global $post;
+			global $post, $wp_query;
 
 			if( $column == 'sortable-posts-order' ){
-				echo '<strong class="sortable-posts-order-position">' . $post->menu_order . '</strong>';
+				$order = $post->menu_order;
+				$filter_inside_posts = apply_filters('sortable_post_inside_tax', array());
+				if( is_array( $filter_inside_posts ) ){
+				  foreach ( $filter_inside_posts as $key=>$combo ) {
+				    if($combo['post_type'] === $post->post_type && $combo['taxonomy'] === $wp_query->query_vars['taxonomy']){
+					$order = get_post_meta( $post->ID, '_sortable_posts_order_' . $post->post_type . '-' . $wp_query->query_vars['taxonomy'] . '-' . $wp_query->query_vars['term'], true );
+					break;
+				    }
+				  }
+				}
+				echo '<strong class="sortable-posts-order-position">' . $order . '</strong>';
 			}
 		}
 
@@ -255,26 +267,86 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function order_by_sortable_posts( $query )
 		{
+			$post_type = get_post_type();
+			if(isset($query->query_vars['post_type'])) {
+			  $post_type = $query->query_vars['post_type'];
+			}
+			if( !is_admin() && (isset($query->query_vars['post_type']) && $query->query_vars['post_type'] === 'page') ) {
+			  $post_type = get_post_type();
+			}
+			if(empty($post_type)) {
+			  return;
+			}
+			$object = get_queried_object();
+			if(!empty($object)) {
+			  $taxonomy = $object->taxonomy;
+			  $taxonomy_term = $object->slug;
+			}
+			
 			// Check if post type is set and if its sortable
-			if( isset( $query->query_vars['post_type'] ) &&
-				in_array( $query->query_vars['post_type'], $this->sortable_types ) ) {
-				
-				// Override on admin
-				if( is_admin() ) {
-					$query->set( 'orderby', 'menu_order' );
-					$query->set( 'order', 'ASC' );
-				} else {
-					// User submitted orderby takes priority to allow for override in frontend
-					if( ! isset( $query->query_vars['orderby'] ) ) {
-						$query->set( 'orderby', 'menu_order' );
+			if( in_array( $post_type, $this->sortable_types ) ) {
+				$inside_tax = 0;
+				$filter_inside_posts = apply_filters('sortable_post_inside_tax', array());
+				if( is_array( $filter_inside_posts ) ){
+				  foreach ( $filter_inside_posts as $combo ) {
+				    if($combo['post_type'] === $post_type && $combo['taxonomy'] === $taxonomy){
+					$inside_tax = true;
+					$taxonomy = $combo['taxonomy'];
+					if(isset($query->query_vars[$combo['taxonomy']])){
+					  $taxonomy_term = $query->query_vars[$combo['taxonomy']];
 					}
-					
-					// User submitted order takes priority to allow for override in frontend
-					if( ! isset( $query->query_vars['order'] ) ) {
-						$query->set( 'order', 'ASC');
-					}
+					break;
+				    }
+				  }
 				}
-				
+				if ( !$inside_tax ) {
+				  // Override on admin
+				  if( is_admin() ) {
+					  $query->set( 'orderby', 'menu_order' );
+					  $query->set( 'order', 'ASC' );
+				  } else {
+					  // User submitted orderby takes priority to allow for override in frontend
+					  if( ! isset( $query->query_vars['orderby'] ) ) {
+						  $query->set( 'orderby', 'menu_order' );
+					  }
+
+					  // User submitted order takes priority to allow for override in frontend
+					  if( ! isset( $query->query_vars['order'] ) ) {
+						  $query->set( 'order', 'ASC');
+					  }
+				  }
+				} else {
+				  
+				  $query->set( 'meta_key', '_sortable_posts_order_' . $post_type . '-' . $taxonomy . '-' . $taxonomy_term );
+				  if( is_admin() ) {
+					  $query->set( 'orderby', 'meta_value_num' );
+					  $query->set( 'order', 'ASC' );
+				  } else {
+					  if (isset($query->query_vars['post_type']) && $query->query_vars['post_type'] === 'page' ) {
+						$query->query[ 'meta_key'] = '_sortable_posts_order_' . $post_type . '-' . $taxonomy . '-' . $taxonomy_term;
+						$query->query[ 'orderby'] = 'meta_value_num';
+						$query->query[ 'order' ] = 'ASC';
+						$query->query[ 'post_type' ] = $post_type;
+						$query->query_vars[ 'orderby'] = 'meta_value_num';
+						$query->query_vars[ 'order' ] = 'ASC';
+						$query->query_vars[ 'post_type' ] = $post_type;
+					  }
+					  if(is_archive() || is_tax()) {
+					    
+					  }
+					  // User submitted orderby takes priority to allow for override in frontend
+					  if( ! isset( $query->query_vars['orderby'] ) ) {
+						  $query->set( 'orderby', 'meta_value_num' );
+					  }
+
+					  // User submitted order takes priority to allow for override in frontend
+					  if( ! isset( $query->query_vars['order'] ) ) {
+						  $query->set( 'order', 'ASC');
+					  }
+				  }
+				  
+			  error_log(print_r($query, true));
+				}				
 			}
 		}
 

@@ -3,7 +3,6 @@ jQuery(document).ready(function($)
 	var list 		= $('body.sortable-posts .wp-list-table #the-list'),
 		rows		= list.find('tr'),
 		statusBox	= $( '#sortable-posts-status' ),
-		statusHead	= statusBox.find( '#sortable-posts-status-head' ),
 		statusMsg	= statusBox.find( '#sortable-posts-status-message' );
 
 	// Create helper so row columns maintain their width.
@@ -42,6 +41,9 @@ jQuery(document).ready(function($)
 				order: order,
 				start: WP_API_Settings.start,
 				object_type: WP_API_Settings.obj_type,
+				post_type: jQuery('.post_type_page').val(),
+				taxonomy: WP_API_Settings.taxonomy,
+				taxonomy_term: WP_API_Settings.taxonomy_term
 			}
 		}).done( function( response ) {
 
