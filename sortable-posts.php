@@ -80,7 +80,7 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts' ) );
 			add_action( 'admin_head', array( $this, 'add_styles_to_header' ) );
 			add_action( 'admin_body_class', array( $this, 'add_classes_to_body' ) );
-			add_action( 'pre_get_posts', array( $this, 'order_by_sortable_posts' ) );
+			add_action( 'pre_get_posts', array( $this, 'order_by_sortable_posts' ),99999 );
 			add_filter( 'wp_insert_post_data', array( $this, 'update_order_on_new_post' ), 99, 2 );
 			add_action( 'admin_notices', array( $this, 'status_update_html' ) );
 		}
@@ -231,12 +231,14 @@ if( ! class_exists( 'SortablePosts' ) ) {
 
 			if( $column == 'sortable-posts-order' ){
 				$order = $post->menu_order;
-				$filter_inside_posts = apply_filters('sortable_post_inside_tax', array());
-				if( is_array( $filter_inside_posts ) ){
-				  foreach ( $filter_inside_posts as $key=>$combo ) {
-				    if($combo['post_type'] === $post->post_type && $combo['taxonomy'] === $wp_query->query_vars['taxonomy']){
-					$order = get_post_meta( $post->ID, '_sortable_posts_order_' . $post->post_type . '-' . $wp_query->query_vars['taxonomy'] . '-' . $wp_query->query_vars['term'], true );
-					break;
+				if(isset($wp_query->query_vars['taxonomy'])) {
+				  $filter_inside_posts = apply_filters('sortable_post_inside_tax', array());
+				  if( is_array( $filter_inside_posts ) ){
+				    foreach ( $filter_inside_posts as $combo ) {
+					if($combo['post_type'] === $post->post_type && $combo['taxonomy'] === $wp_query->query_vars['taxonomy']){
+					  $order = get_post_meta( $post->ID, '_sortable_posts_order_' . $wp_query->query_vars['taxonomy'] . '_' . $wp_query->query_vars['term'], true );
+					  break;
+					}
 				    }
 				  }
 				}
@@ -267,35 +269,43 @@ if( ! class_exists( 'SortablePosts' ) ) {
 		 */
 		function order_by_sortable_posts( $query )
 		{
-			$post_type = get_post_type();
+			global $wp_query;
+			//Get the post type
+			$post_type = '';
 			if(isset($query->query_vars['post_type'])) {
 			  $post_type = $query->query_vars['post_type'];
 			}
-			if( !is_admin() && (isset($query->query_vars['post_type']) && $query->query_vars['post_type'] === 'page') ) {
+			// On the archive page of the taxonomy term the post type on the query is page
+			if( is_archive() && $post_type === 'page' ) {
 			  $post_type = get_post_type();
 			}
+			//No Post type? Stop!
 			if(empty($post_type)) {
 			  return;
 			}
-			$object = get_queried_object();
-			if(!empty($object)) {
-			  $taxonomy = $object->taxonomy;
-			  $taxonomy_term = $object->slug;
-			}
-			
 			// Check if post type is set and if its sortable
 			if( in_array( $post_type, $this->sortable_types ) ) {
+				// Detect taxonomy and term
+				$taxonomy = $taxonomy_term = '';
+				$queried = get_queried_object();
+				if(isset($queried->taxonomy)) {
+				  $taxonomy = $queried->taxonomy;
+				  $taxonomy_term = $queried->slug;
+				} elseif(isset($query->query['tax_query'])){
+				  // This check if a custom WP_query
+				  $taxonomy = $query->query['tax_query'][0]['taxonomy'];
+				  $taxonomy_term = $query->query['tax_query'][0]['terms'];
+				}
 				$inside_tax = 0;
-				$filter_inside_posts = apply_filters('sortable_post_inside_tax', array());
-				if( is_array( $filter_inside_posts ) ){
-				  foreach ( $filter_inside_posts as $combo ) {
-				    if($combo['post_type'] === $post_type && $combo['taxonomy'] === $taxonomy){
-					$inside_tax = true;
-					$taxonomy = $combo['taxonomy'];
-					if(isset($query->query_vars[$combo['taxonomy']])){
-					  $taxonomy_term = $query->query_vars[$combo['taxonomy']];
+				// Check if array need to sorted based the term parent
+				if($taxonomy !== '') {
+				  $filter_inside_posts = apply_filters('sortable_post_inside_tax', array());
+				  if( is_array( $filter_inside_posts ) ){
+				    foreach ( $filter_inside_posts as $combo ) {
+					if($combo['post_type'] === $post_type && $combo['taxonomy'] === $taxonomy){
+					  $inside_tax = true;
+					  break;
 					}
-					break;
 				    }
 				  }
 				}
@@ -316,38 +326,51 @@ if( ! class_exists( 'SortablePosts' ) ) {
 					  }
 				  }
 				} else {
-				  
-				  $query->set( 'meta_key', '_sortable_posts_order_' . $post_type . '-' . $taxonomy . '-' . $taxonomy_term );
-				  if( is_admin() ) {
+				  // If admin or custom WP_query
+				  if( is_admin() || !is_archive() && isset($query->query['tax_query'])) {
 					  $query->set( 'orderby', 'meta_value_num' );
 					  $query->set( 'order', 'ASC' );
+					  $query->set( 'meta_query',
+					    array( 
+						  'relation' => 'OR',
+						  array(  
+							'key' => '_sortable_posts_order_' . $taxonomy . '_' . $taxonomy_term,
+							'compare' => '!=',
+							'value' => ''
+						    ),
+						  array(  
+							'key' => '_sortable_posts_order_' . $taxonomy . '_' . $taxonomy_term,
+							'compare' => 'NOT EXISTS',
+							'value' => ''
+						    )
+						  )
+					    );
 				  } else {
-					  if (isset($query->query_vars['post_type']) && $query->query_vars['post_type'] === 'page' ) {
-						$query->query[ 'meta_key'] = '_sortable_posts_order_' . $post_type . '-' . $taxonomy . '-' . $taxonomy_term;
-						$query->query[ 'orderby'] = 'meta_value_num';
-						$query->query[ 'order' ] = 'ASC';
-						$query->query[ 'post_type' ] = $post_type;
-						$query->query_vars[ 'orderby'] = 'meta_value_num';
-						$query->query_vars[ 'order' ] = 'ASC';
-						$query->query_vars[ 'post_type' ] = $post_type;
-					  }
-					  if(is_archive() || is_tax()) {
-					    
-					  }
-					  // User submitted orderby takes priority to allow for override in frontend
-					  if( ! isset( $query->query_vars['orderby'] ) ) {
-						  $query->set( 'orderby', 'meta_value_num' );
-					  }
-
-					  // User submitted order takes priority to allow for override in frontend
-					  if( ! isset( $query->query_vars['order'] ) ) {
-						  $query->set( 'order', 'ASC');
-					  }
+					    //If is an archive
+					    $args = $wp_query->query_vars;
+					    $new_args = array();
+					    $new_args['orderby'] = 'meta_value_num';
+					    $new_args['order'] = 'ASC';
+					    $new_args[ 'meta_query'] = array( 
+						    'relation' => 'OR',
+						    array(  
+							  'key' => '_sortable_posts_order_' . $taxonomy . '_' . $taxonomy_term,
+							  'compare' => '!=',
+							  'value' => ''
+							),
+						    array(  
+							  'key' => '_sortable_posts_order_' . $taxonomy . '_' . $taxonomy_term,
+							  'compare' => 'NOT EXISTS',
+							  'value' => ''
+							)
+						    );
+					    $wp_query = new WP_Query(array_merge($args, $new_args));
+					    return $wp_query;
+					  } 
 				  }
-				  
-			  error_log(print_r($query, true));
-				}				
+								
 			}
+			return $query;
 		}
 
 		/**

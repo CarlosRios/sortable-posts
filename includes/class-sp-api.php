@@ -257,7 +257,7 @@ class SortablePosts_API {
 			$position = abs( $position + 1 );
 			
 			// Update the term_order
-			update_post_meta( $term_id, '_sortable_posts_order_' . $this->post_type . '-' . $this->taxonomy . '-' . $this->taxonomy_term, $position );
+			update_post_meta( $term_id, '_sortable_posts_order_' . $this->taxonomy . '_' . $this->taxonomy_term, $position );
 		  }
 		  return;
 		}
