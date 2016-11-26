@@ -292,6 +292,9 @@ if( ! class_exists( 'SortablePosts' ) ) {
 				  $taxonomy = $queried->taxonomy;
 				  $taxonomy_term = $queried->slug;
 				} elseif(isset($query->query['tax_query'])){
+                                  if ( empty( $query->query['tax_query'] ) ) {
+                                    return false;
+                                  }
 				  // This check if a custom WP_query
 				  $taxonomy = $query->query['tax_query'][0]['taxonomy'];
 				  $taxonomy_term = $query->query['tax_query'][0]['terms'];
