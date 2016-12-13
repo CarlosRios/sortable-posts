@@ -96,9 +96,11 @@ class SortablePosts_Taxonomies {
 	{
 		if( is_admin() ) {
                     global $wpdb;
-                    $screen = get_current_screen();
-                    if( $screen->base === 'edit-tags' || $screen->base === 'post' || $screen->base === 'edit' ) {
-                        return $clauses;
+                    if(function_exists('get_current_screen')) {
+                        $screen = get_current_screen();
+                        if( $screen->base === 'edit-tags' || $screen->base === 'post' || $screen->base === 'edit' ) {
+                            return $clauses;
+                        }
                     }
                     // Need to rework this. Allows users to override orderby param
                     if ( isset( $args['orderby'] ) && $args['orderby'] !== 'name' ){
