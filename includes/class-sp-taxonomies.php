@@ -94,39 +94,46 @@ class SortablePosts_Taxonomies {
 	 */
 	public function orderby_sortable_taxonomies( $clauses, $taxonomies, $args )
 	{
-		global $wpdb;
+		if( is_admin() ) {
+                    global $wpdb;
+                    if(function_exists('get_current_screen')) {
+                        $screen = get_current_screen();
+                        if( $screen->base === 'edit-tags' || $screen->base === 'post' || $screen->base === 'edit' ) {
+                            return $clauses;
+                        }
+                    }
+                    // Need to rework this. Allows users to override orderby param
+                    if ( isset( $args['orderby'] ) && $args['orderby'] !== 'name' ){
+                            return $clauses;
+                    }
 
-		// Need to rework this. Allows users to override orderby param
-		if ( isset( $args['orderby'] ) && $args['orderby'] !== 'name' ){
-			return $clauses;
-		}
+                    // taxonomies might come as associative array.
+                    // make sure $taxonomy_values[0] won't trigger a php warning
+                    $taxonomy_values = array_values( $taxonomies );
 
-		// taxonomies might come as associative array.
-		// make sure $taxonomy_values[0] won't trigger a php warning
-		$taxonomy_values = array_values( $taxonomies );
+                    // Accept only single taxonomy queries & only if taxonomy is sortable
+                    if ( ! in_array( $taxonomy_values[0], $this->sortable_taxes ) ) {
+                            return $clauses;
+                    }
 
-		// Accept only single taxonomy queries & only if taxonomy is sortable
-		if ( ! in_array( $taxonomy_values[0], $this->sortable_taxes ) ) {
-			return $clauses;
-		}
+                    // Join termmeta to terms tables
+                    $clauses['join'] .= " INNER JOIN {$wpdb->termmeta} tm ON (t.term_id = tm.term_id AND tm.meta_key = 'term_order')";
 
-		// Join termmeta to terms tables
-		$clauses['join'] .= " INNER JOIN {$wpdb->termmeta} tm ON (t.term_id = tm.term_id AND tm.meta_key = 'term_order')";
+                    // Set order to default to ascending
+                    $order = strtoupper( $args['order'] );
+                    if ( ! in_array( $order, array('ASC', 'DESC') ) ) {
+                            $order = 'ASC';
+                    }
+                    $orderby = "ORDER BY ABS(tm.meta_value) {$order}";
 
-		// Set order to default to ascending
-		$order = strtoupper( $args['order'] );
-		if ( ! in_array( $order, array('ASC', 'DESC') ) ) {
-			$order = 'ASC';
-		}
-		$orderby = "ORDER BY ABS(tm.meta_value) {$order}";
-
-		if ( ! empty( $clauses['orderby'] ) ) {
-			// insert custom column in front of current column
-			$clauses['orderby'] = str_replace( 'ORDER BY', "{$orderby},", $clauses['orderby'] );
-		} else {
-			// sort by custom sort column and name
-			$clauses['orderby'] = "{$orderby}, name";
-		}
+                    if ( ! empty( $clauses['orderby'] ) ) {
+                            // insert custom column in front of current column
+                            $clauses['orderby'] = str_replace( 'ORDER BY', "{$orderby},", $clauses['orderby'] );
+                    } else {
+                            // sort by custom sort column and name
+                            $clauses['orderby'] = "{$orderby}, name";
+                    }
+                }
 
 		return $clauses;
 	}

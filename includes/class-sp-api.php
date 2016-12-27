@@ -38,6 +38,30 @@ class SortablePosts_API {
 	 * @var string
 	 */
 	public $obj_type = '';
+	
+	/**
+	 * Stores the post type
+	 * 
+	 * @since  1.0
+	 * @var string
+	 */
+	public $post_type = '';
+	
+	/**
+	 * Stores the taxonomy
+	 * 
+	 * @since  1.0
+	 * @var string
+	 */
+	public $taxonomy = '';
+	
+	/**
+	 * Stores the taxonomy term
+	 * 
+	 * @since  1.0
+	 * @var string
+	 */
+	public $taxonomy_term = '';
 
 	/**
 	 * Registers the REST API endpoints
@@ -148,6 +172,19 @@ class SortablePosts_API {
 
 		// Set the object types
 		$this->obj_type = sanitize_key( $request->get_param( 'object_type' ) );
+		
+		// Set the post types
+		$this->post_type = sanitize_key( $request->get_param( 'post_type' ) );
+		
+		// Set the taxonomy
+		if( !empty(sanitize_key( $request->get_param( 'taxonomy' ) )) ) {
+		    $this->taxonomy = sanitize_key( $request->get_param( 'taxonomy' ) );
+		}
+		
+		// Set the object types
+		if( !empty(sanitize_key( $request->get_param( 'taxonomy' ) )) ) {
+		    $this->taxonomy_term = sanitize_key( $request->get_param( 'taxonomy_term' ) );
+		}
 	}
 
 	/**
@@ -185,21 +222,45 @@ class SortablePosts_API {
 	 */
 	protected function update_post_sort_order()
 	{
-		global $wpdb;
+		// Check if the combination of post type and taxonomy	
+		$inside_tax = false;
+		if( !empty($this->taxonomy) && !empty($this->taxonomy_term) ) {
+		  $filter_inside_posts = apply_filters('sortable_post_inside_tax', array());
+		  if( is_array( $filter_inside_posts ) ){
+		    foreach ( $filter_inside_posts as $combo ) {
+			if($combo['post_type'] === $this->post_type && $combo['taxonomy'] === $this->taxonomy){
+			  $inside_tax = true;
+			  break;
+			}
+		    }
+		  }
+		}
+		if ( ! $inside_tax ) {
+		  global $wpdb;
 
-		// Select items based on the starting point
-		$wpdb->query( "SELECT @i:= $this->start-1" );
-		
-		// Order needs to be a comma separated string
-		$this->order = esc_sql( implode( ', ', $this->order ) );
+		  // Select items based on the starting point
+		  $wpdb->query( "SELECT @i:= $this->start-1" );
 
-		// Insert the new order
-		$new_order = $wpdb->query(
-			"UPDATE {$wpdb->posts} SET menu_order = ( @i:= @i+1 )
-			WHERE ID IN ( $this->order ) ORDER BY FIELD( ID, $this->order );"
-		, ARRAY_A );
+		  // Order needs to be a comma separated string
+		  $this->order = esc_sql( implode( ', ', $this->order ) );
 
-		return $new_order;
+		  // Insert the new order
+		  $new_order = $wpdb->query(
+			  "UPDATE {$wpdb->posts} SET menu_order = ( @i:= @i+1 )
+			  WHERE ID IN ( $this->order ) ORDER BY FIELD( ID, $this->order );"
+		  , ARRAY_A );
+		  return $new_order;
+		} else {
+		  foreach( (array) $this->order as $term_id ) {
+			// Get the position in the array
+			$position = array_search( $term_id, $this->order );
+			$position = abs( $position + 1 );
+			
+			// Update the term_order
+			update_post_meta( $term_id, '_sortable_posts_order_' . $this->taxonomy . '_' . $this->taxonomy_term, $position );
+		  }
+		  return;
+		}
 	}
 
 	/**
