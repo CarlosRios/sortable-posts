@@ -391,9 +391,17 @@ if( ! class_exists( 'SortablePosts' ) ) {
 			if( in_array( $type, $this->sortable_types ) && $data['menu_order'] == 0 )
 			{
 				global $wpdb;
-				$data['menu_order'] = $wpdb->get_var(
+
+				$new_menu_order = $wpdb->get_var(
 					"SELECT MAX(menu_order)+1 AS menu_order FROM {$wpdb->posts} WHERE post_type='{$type}'"
 				);
+
+				if ( is_null( $new_menu_order ) )
+				{
+					$new_menu_order = 1;
+				}
+
+				$data['menu_order'] = $new_menu_order;
 			}
 
 			return $data;
